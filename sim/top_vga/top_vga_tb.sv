@@ -38,7 +38,7 @@ module top_vga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst;
+    logic clk, rst_n;
     wire vs, hs;
     wire [3:0] r, g, b;
 
@@ -59,7 +59,7 @@ module top_vga_tb;
 
     top_vga dut (
         .clk(clk),
-        .rst(rst),
+        .rst_n(rst_n),
         .vs(vs),
         .hs(hs),
         .r(r),
@@ -85,9 +85,9 @@ module top_vga_tb;
      */
 
     initial begin
-        rst = 1'b0;
-        #(RST_START_TIME) rst = 1'b1;
-        #(RST_ACTIVE_TIME) rst = 1'b0;
+        rst_n = 1'b0;
+        #(RST_START_TIME) rst_n = 1'b1;
+        #(RST_ACTIVE_TIME) rst_n = 1'b0;
 
         $display("If simulation ends before the testbench");
         $display("completes, use the menu option to run all.");

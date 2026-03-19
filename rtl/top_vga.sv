@@ -14,7 +14,7 @@
 
 module top_vga (
         input  logic clk,
-        input  logic rst,
+        input  logic rst_n,
         output logic vs,
         output logic hs,
         output logic [3:0] r,
@@ -56,7 +56,7 @@ module top_vga (
 
     vga_timing u_vga_timing (
         .clk,
-        .rst,
+        .rst_n,
         .vcount (vcount_tim),
         .vsync  (vsync_tim),
         .vblnk  (vblnk_tim),
@@ -67,7 +67,7 @@ module top_vga (
 
     draw_bg u_draw_bg (
         .clk,
-        .rst,
+        .rst_n,
 
         .vcount_in  (vcount_tim),
         .vsync_in   (vsync_tim),

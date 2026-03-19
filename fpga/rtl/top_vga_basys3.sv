@@ -119,7 +119,7 @@ module top_vga_basys3 (
 
     top_vga u_top_vga (
         .clk(pclk),
-        .rst(btnC),
+        .rst_n(btnC),
         .r(vgaRed),
         .g(vgaGreen),
         .b(vgaBlue),
