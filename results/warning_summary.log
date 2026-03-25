@@ -1,0 +1,9 @@
+Warnings, critical warnings and errors from synthesis and implementation
+
+Created: 2026-03-25 17:58:24
+
+----SYNTHESIS----
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+
+----IMPLEMENTATION----
+CLEAR :)
