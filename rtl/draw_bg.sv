@@ -45,7 +45,7 @@ module draw_bg (
      * Internal logic
      */
 
-    always_ff @(posedge clk) begin : bg_ff_blk
+    always_ff @(posedge clk or negedge rst_n) begin : bg_ff_blk
         if (!rst_n) begin
             vcount_out <= '0;
             vsync_out  <= '0;
@@ -66,22 +66,38 @@ module draw_bg (
     end
 
     always_comb begin : bg_comb_blk
-        if (vblnk_in || hblnk_in) begin             // Blanking region:
-            rgb_nxt = 12'h0_0_0;                    // - make it it black.
-        end else begin                              // Active region:
-            if (vcount_in == 0)                     // - top edge:
-                rgb_nxt = 12'hf_f_0;                // - - make a yellow line.
-            else if (vcount_in == VER_PIXELS - 1)   // - bottom edge:
-                rgb_nxt = 12'hf_0_0;                // - - make a red line.
-            else if (hcount_in == 0)                // - left edge:
-                rgb_nxt = 12'h0_f_0;                // - - make a green line.
-            else if (hcount_in == HOR_PIXELS - 1)   // - right edge:
-                rgb_nxt = 12'h0_0_f;                // - - make a blue line.
+        logic draw_T, draw_J1, draw_K, draw_J2;
 
-            
+        //T X: 100-200, Y: 200-400
+        draw_T = (hcount_in >= 100 && hcount_in < 200 && vcount_in >= 200 && vcount_in < 220) || // Górna belka
+                 (hcount_in >= 140 && hcount_in < 160 && vcount_in >= 220 && vcount_in < 400);   // Pionowy słupek
 
-            else                                    // The rest of active display pixels:
-                rgb_nxt = 12'h8_8_8;                // - fill with gray.
+        // Pierwsze J (X: 220-300, Y: 200-400)
+        draw_J1 = (hcount_in >= 280 && hcount_in < 300 && vcount_in >= 200 && vcount_in < 400) || // Prawy słupek
+                  (hcount_in >= 220 && hcount_in < 300 && vcount_in >= 380 && vcount_in < 400) || // Dolna belka
+                  (hcount_in >= 220 && hcount_in < 240 && vcount_in >= 320 && vcount_in < 400) || // Lewy haczyk
+                  (hcount_in >= 220 && hcount_in < 300 && vcount_in >= 200 && vcount_in < 220);   // Górna belka
+
+        //K X: 450-570, Y: 200-400
+        draw_K = (hcount_in >= 450 && hcount_in < 470 && vcount_in >= 200 && vcount_in < 400) || // Pionowy słupek
+                 (hcount_in >= 470 && hcount_in < 570 && vcount_in >= 300 - (hcount_in - 470) && vcount_in < 320 - (hcount_in - 470)) || // Górne ramię
+                 (hcount_in >= 470 && hcount_in < 570 && vcount_in >= 280 + (hcount_in - 470) && vcount_in < 300 + (hcount_in - 470));   // Dolne ramię
+
+        // Drugie J X: 620-700, Y: 200-400
+        draw_J2 = (hcount_in >= 680 && hcount_in < 700 && vcount_in >= 200 && vcount_in < 400) || // Prawy słupek
+                  (hcount_in >= 620 && hcount_in < 700 && vcount_in >= 380 && vcount_in < 400) || // Dolna belka
+                  (hcount_in >= 620 && hcount_in < 640 && vcount_in >= 320 && vcount_in < 400) || // Lewy haczyk
+                  (hcount_in >= 620 && hcount_in < 700 && vcount_in >= 200 && vcount_in < 220);   // Górna belka
+
+        if (vblnk_in || hblnk_in) begin
+            rgb_nxt = 12'h0_0_0;
+        end else begin
+            if (vcount_in == 0) rgb_nxt = 12'hf_f_0;
+            else if (vcount_in == VER_PIXELS - 1) rgb_nxt = 12'hf_0_0;
+            else if (hcount_in == 0) rgb_nxt = 12'h0_f_0;
+            else if (hcount_in == HOR_PIXELS - 1) rgb_nxt = 12'h0_0_f;
+            else if (draw_T || draw_J1 || draw_K || draw_J2) rgb_nxt = 12'h7_f_d; // aquamarine
+            else rgb_nxt = 12'h0_0_0;
         end
     end
 

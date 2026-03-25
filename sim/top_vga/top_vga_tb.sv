@@ -57,15 +57,15 @@ module top_vga_tb;
      * Submodules instances
      */
 
-    top_vga dut (
-        .clk(clk),
-        .rst_n(rst_n),
-        .vs(vs),
-        .hs(hs),
-        .r(r),
-        .g(g),
-        .b(b)
-    );
+   top_vga dut (
+    .clk(clk),
+    .rst_n(rst_n),
+    .r(r),
+    .g(g),
+    .b(b),
+    .hs(hs),
+    .vs(vs)
+);
 
     tiff_writer #(
         .XDIM(16'd1056),
@@ -80,14 +80,17 @@ module top_vga_tb;
     );
 
 
+
+
+
     /**
      * Main test
      */
 
     initial begin
-        rst_n = 1'b0;
-        #(RST_START_TIME) rst_n = 1'b1;
-        #(RST_ACTIVE_TIME) rst_n = 1'b0;
+        rst_n = 1'b1;
+        #(RST_START_TIME) rst_n = 1'b0;
+        #(RST_ACTIVE_TIME) rst_n = 1'b1;
 
         $display("If simulation ends before the testbench");
         $display("completes, use the menu option to run all.");

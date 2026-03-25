@@ -51,10 +51,9 @@ module vga_timing_tb;
      */
 
     initial begin
-        rst_n = 1'b0;
-        #(RST_START_TIME) rst_n = 1'b1;
         rst_n = 1'b1;
-        #(RST_ACTIVE_TIME) rst_n = 1'b0;
+        #(RST_START_TIME) rst_n = 1'b0;
+        #(RST_ACTIVE_TIME) rst_n = 1'b1;
     end
 
 
