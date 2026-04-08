@@ -43,6 +43,7 @@ module vga_timing_tb;
     initial begin
         clk = 1'b0;
         forever #(CLK_PERIOD/2) clk = ~clk;
+        $finish;
     end
 
 
@@ -94,8 +95,9 @@ module vga_timing_tb;
         @(negedge rst_n);
         @(posedge rst_n);
 
-        wait (vsync == 1'b0);
+        @(posedge vsync);
         @(negedge vsync);
+        @(posedge vsync);
         @(negedge vsync);
 
         $finish;

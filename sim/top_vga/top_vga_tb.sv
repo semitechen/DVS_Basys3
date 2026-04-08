@@ -92,16 +92,11 @@ module top_vga_tb;
         #(RST_START_TIME) rst_n = 1'b0;
         #(RST_ACTIVE_TIME) rst_n = 1'b1;
 
-        $display("If simulation ends before the testbench");
-        $display("completes, use the menu option to run all.");
-        $display("Prepare to wait a long time...");
+        @(posedge vs);
+        @(negedge vs);
+        @(posedge vs);
+        @(negedge vs);
 
-        wait (vs == 1'b0);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-
-        // End the simulation.
-        $display("Simulation is over, check the waveforms.");
         $finish;
     end
 

@@ -88,8 +88,10 @@ module top_vga_basys3 (
         .O(clk_ss)
     );
 
-    always_ff @(posedge clk_ss)
-        safe_start <= {safe_start[6:0],locked};
+    always_ff @(posedge clk_ss or negedge locked) begin
+        if (!locked) safe_start <= 8'b0;
+        else         safe_start <= {safe_start[6:0],1'b1};
+    end
 
     BUFGCE #(
         .SIM_DEVICE("7SERIES")

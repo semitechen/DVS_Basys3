@@ -38,7 +38,7 @@ module top_fpga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst;
+    logic clk, btnC;
     wire pclk;
     wire vs, hs;
     wire [3:0] r, g, b;
@@ -60,7 +60,7 @@ module top_fpga_tb;
 
     top_vga_basys3 dut (
         .clk(clk),
-        .btnC(rst),
+        .btnC(btnC),
         .Vsync(vs),
         .Hsync(hs),
         .vgaRed(r),
@@ -81,26 +81,17 @@ module top_fpga_tb;
         .go(vs)
     );
 
-
     /**
      * Main test
      */
 
     initial begin
-        rst = 1'b0;
-        #(RST_START_TIME) rst = 1'b1;
-        #(RST_ACTIVE_TIME) rst = 1'b0;
+        btnC = 1'b0;
+        #(RST_START_TIME) btnC = 1'b1;
+        #(RST_ACTIVE_TIME) btnC = 1'b0;
 
-        $display("If simulation ends before the testbench");
-        $display("completes, use the menu option to run all.");
-        $display("Prepare to wait a long time...");
+        repeat(100) @(posedge hs);
 
-        wait (vs == 1'b0);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-
-        // End the simulation.
-        $display("Simulation is over, check the waveforms.");
         $finish;
     end
 
