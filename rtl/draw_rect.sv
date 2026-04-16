@@ -1,6 +1,4 @@
 module draw_rect #(
-    parameter int X_POS = 80,
-    parameter int Y_POS = 180,
     parameter int WIDTH = 640,
     parameter int HEIGHT = 240,
     parameter int THICKNESS = 10,
@@ -8,6 +6,8 @@ module draw_rect #(
 )(
     input  logic clk,
     input  logic rst_n,
+    input logic x_pos,
+    input logic y_pos,
     vga_if.in  vga_in,
     vga_if.out vga_out
 );
@@ -41,15 +41,15 @@ timeprecision 1ps;
     end
 
     always_comb begin
-        inside_outer = (vga_in.hcount >= X_POS) &&
-                       (vga_in.hcount < (X_POS + WIDTH)) &&
-                       (vga_in.vcount >= Y_POS) &&
-                       (vga_in.vcount < (Y_POS + HEIGHT));
+        inside_outer = (vga_in.hcount >= x_pos) &&
+                       (vga_in.hcount < (x_pos + WIDTH)) &&
+                       (vga_in.vcount >= y_pos) &&
+                       (vga_in.vcount < (y_pos + HEIGHT));
 
-        inside_inner = (vga_in.hcount >= (X_POS + THICKNESS)) &&
-                       (vga_in.hcount < (X_POS + WIDTH - THICKNESS)) &&
-                       (vga_in.vcount >= (Y_POS + THICKNESS)) &&
-                       (vga_in.vcount < (Y_POS + HEIGHT - THICKNESS));
+        inside_inner = (vga_in.hcount >= (x_pos + THICKNESS)) &&
+                       (vga_in.hcount < (x_pos + WIDTH - THICKNESS)) &&
+                       (vga_in.vcount >= (y_pos + THICKNESS)) &&
+                       (vga_in.vcount < (y_pos + HEIGHT - THICKNESS));
 
         if (inside_outer && !inside_inner) begin
             rgb_nxt = COLOR;
