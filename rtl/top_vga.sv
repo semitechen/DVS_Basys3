@@ -15,6 +15,9 @@
 module top_vga (
         input  logic clk,
         input  logic rst_n,
+        input  logic clk100MHz,
+        inout  wire  ps2_clk,
+        inout  wire  ps2_data,
         output logic vs,
         output logic hs,
         output logic [3:0] r,
@@ -39,47 +42,67 @@ module top_vga (
     /**
      * Signals assignments
      */
+/**
+ * Local variables and signals
+ */
 
-    assign vs = vga_out.vsync;
-    assign hs = vga_out.hsync;
-    assign {r,g,b} = vga_out.rgb;
+logic [11:0] x_pos, y_pos;
 
+vga_if vga_bg();    
+vga_if vga_rect();  
+vga_if vga_out();
 
-    /**
-     * Submodules instances
-     */
+...
 
-    vga_timing u_vga_timing (
-        .clk,
-        .rst_n,
-        .vcount (vga_bg.vcount),
-        .vsync  (vga_bg.vsync),
-        .vblnk  (vga_bg.vblnk),
-        .hcount (vga_bg.hcount),
-        .hsync  (vga_bg.hsync),
-        .hblnk  (vga_bg.hblnk)
-    );
+vga_timing u_vga_timing (
+    .clk,
+    .rst_n,
+    .vcount (vga_bg.vcount),
+    .vsync  (vga_bg.vsync),
+    .vblnk  (vga_bg.vblnk),
+    .hcount (vga_bg.hcount),
+    .hsync  (vga_bg.hsync),
+    .hblnk  (vga_bg.hblnk)
+);
 
-    draw_bg u_draw_bg (
-        .clk,
-        .rst_n,
-        .vga_in  (vga_bg),
-        .vga_out (vga_rect)
-    );
+MouseCtl u_MouseCtl (
+    .clk         (clk100MHz),
+    .rst         (!rst_n),
+    .xpos        (x_pos),
+    .ypos        (y_pos),
+    .zpos        (),
+    .left        (),
+    .middle      (),
+    .right       (),
+    .new_event   (),
+    .value       (12'b0),
+    .setx        (1'b0),
+    .sety        (1'b0),
+    .setmax_x    (1'b0),
+    .setmax_y    (1'b0),
+    .ps2_clk     (ps2_clk),
+    .ps2_data    (ps2_data)
+);
 
-    draw_rect #(
-        .x_pos(80),
-        .y_pos(180),
-        .WIDTH(640),
-        .HEIGHT(240),
-        .THICKNESS(5),
-        .COLOR(12'hf_0_0) 
-    ) u_draw_rect (
-        .clk     (clk),
-        .rst_n   (rst_n),
-        .vga_in  (vga_rect),
-        .vga_out (vga_out)
-    );
+draw_bg u_draw_bg (
+    .clk,
+    .rst_n,
+    .vga_in  (vga_bg),
+    .vga_out (vga_rect)
+);
 
+draw_rect #(
+    .WIDTH(640),
+    .HEIGHT(240),
+    .THICKNESS(5),
+    .COLOR(12'hf_0_0) 
+) u_draw_rect (
+    .clk     (clk),
+    .rst_n   (rst_n),
+    .x_pos   (x_pos),
+    .y_pos   (y_pos),
+    .vga_in  (vga_rect),
+    .vga_out (vga_out)
+);
 
 endmodule

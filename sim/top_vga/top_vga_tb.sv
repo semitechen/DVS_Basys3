@@ -38,9 +38,10 @@ module top_vga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst_n;
+    logic clk, clk100MHz, rst_n;
     wire vs, hs;
     wire [3:0] r, g, b;
+    wire ps2_clk, ps2_data;
 
 
     /**
@@ -52,6 +53,11 @@ module top_vga_tb;
         forever #(CLK_PERIOD/2) clk = ~clk;
     end
 
+    initial begin
+        clk100MHz = 1'b0;
+        forever #(10/2) clk100MHz = ~clk100MHz;
+    end
+
 
     /**
      * Submodules instances
@@ -60,6 +66,9 @@ module top_vga_tb;
    top_vga dut (
     .clk(clk),
     .rst_n(rst_n),
+    .clk100MHz(clk100MHz),
+    .ps2_clk(ps2_clk),
+    .ps2_data(ps2_data),
     .r(r),
     .g(g),
     .b(b),

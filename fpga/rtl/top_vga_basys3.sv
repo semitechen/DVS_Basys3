@@ -15,6 +15,8 @@
 module top_vga_basys3 (
         input  wire clk,
         input  wire btnC,
+        inout  wire PS2Clk,
+        inout  wire PS2Data,
         output wire Vsync,
         output wire Hsync,
         output wire [3:0] vgaRed,
@@ -84,6 +86,9 @@ module top_vga_basys3 (
     top_vga u_top_vga (
         .clk(clk_40MHz),
         .rst_n(!btnC),
+        .clk100MHz(clk_100MHz),
+        .ps2_clk(PS2Clk),
+        .ps2_data(PS2Data),
         .r(vgaRed),
         .g(vgaGreen),
         .b(vgaBlue),
