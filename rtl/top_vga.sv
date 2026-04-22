@@ -32,77 +32,87 @@ module top_vga (
      * Local variables and signals
      */
 
+    logic [11:0] x_pos, y_pos;
 
     vga_if vga_bg();    
     vga_if vga_rect();  
+    vga_if vga_mouse();
     vga_if vga_out();
 
-    assign vga_bg.rgb = 12'h0_0_0;
 
     /**
      * Signals assignments
      */
-/**
- * Local variables and signals
- */
 
-logic [11:0] x_pos, y_pos;
+    assign vga_bg.rgb = 12'h0_0_0;
+    assign vs = vga_out.vsync;
+    assign hs = vga_out.hsync;
+    assign {r,g,b} = vga_out.rgb;
 
-vga_if vga_bg();    
-vga_if vga_rect();  
-vga_if vga_out();
 
-...
+    /**
+     * Submodules instances
+     */
 
-vga_timing u_vga_timing (
-    .clk,
-    .rst_n,
-    .vcount (vga_bg.vcount),
-    .vsync  (vga_bg.vsync),
-    .vblnk  (vga_bg.vblnk),
-    .hcount (vga_bg.hcount),
-    .hsync  (vga_bg.hsync),
-    .hblnk  (vga_bg.hblnk)
-);
+    vga_timing u_vga_timing (
+        .clk,
+        .rst_n,
+        .vcount (vga_bg.vcount),
+        .vsync  (vga_bg.vsync),
+        .vblnk  (vga_bg.vblnk),
+        .hcount (vga_bg.hcount),
+        .hsync  (vga_bg.hsync),
+        .hblnk  (vga_bg.hblnk)
+    );
 
-MouseCtl u_MouseCtl (
-    .clk         (clk100MHz),
-    .rst         (!rst_n),
-    .xpos        (x_pos),
-    .ypos        (y_pos),
-    .zpos        (),
-    .left        (),
-    .middle      (),
-    .right       (),
-    .new_event   (),
-    .value       (12'b0),
-    .setx        (1'b0),
-    .sety        (1'b0),
-    .setmax_x    (1'b0),
-    .setmax_y    (1'b0),
-    .ps2_clk     (ps2_clk),
-    .ps2_data    (ps2_data)
-);
+    MouseCtl u_MouseCtl (
+        .clk         (clk100MHz),
+        .rst         (!rst_n),
+        .xpos        (x_pos),
+        .ypos        (y_pos),
+        .zpos        (),
+        .left        (),
+        .middle      (),
+        .right       (),
+        .new_event   (),
+        .value       (12'b0),
+        .setx        (1'b0),
+        .sety        (1'b0),
+        .setmax_x    (1'b0),
+        .setmax_y    (1'b0),
+        .ps2_clk     (ps2_clk),
+        .ps2_data    (ps2_data)
+    );
 
-draw_bg u_draw_bg (
-    .clk,
-    .rst_n,
-    .vga_in  (vga_bg),
-    .vga_out (vga_rect)
-);
+    draw_bg u_draw_bg (
+        .clk,
+        .rst_n,
+        .vga_in  (vga_bg),
+        .vga_out (vga_rect)
+    );
 
-draw_rect #(
-    .WIDTH(640),
-    .HEIGHT(240),
-    .THICKNESS(5),
-    .COLOR(12'hf_0_0) 
-) u_draw_rect (
-    .clk     (clk),
-    .rst_n   (rst_n),
-    .x_pos   (x_pos),
-    .y_pos   (y_pos),
-    .vga_in  (vga_rect),
-    .vga_out (vga_out)
-);
+    draw_rect #(
+        .WIDTH(640),
+        .HEIGHT(240),
+        .THICKNESS(5),
+        .COLOR(12'hf_0_0) 
+    ) u_draw_rect (
+        .clk     (clk),
+        .rst_n   (rst_n),
+        .x_pos   (x_pos),
+        .y_pos   (y_pos),
+        .vga_in  (vga_rect),
+        .vga_out (vga_mouse)
+    );
+
+    draw_mouse u_draw_mouse (
+        .clk     (clk),
+        .rst_n   (rst_n),
+        .x_pos   (x_pos),
+        .y_pos   (y_pos),
+        .vga_in  (vga_mouse),
+        .vga_out (vga_out)
+    );
+
 
 endmodule

@@ -39,6 +39,7 @@ set sv_files {
     ../rtl/vga_timing.sv
     ../rtl/draw_bg.sv
     ../rtl/draw_rect.sv
+    ../rtl/draw_mouse.sv
     ../rtl/top_vga.sv
     rtl/top_vga_basys3.sv
 }
@@ -52,6 +53,7 @@ set sv_files {
 set vhdl_files {
     ../rtl/Ps2Interface.vhd
     ../rtl/MouseCtl.vhd
+    ../rtl/MouseDisplay.vhd
 }
 
 # Specify files for a memory initialization     -- EDIT
