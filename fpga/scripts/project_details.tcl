@@ -27,11 +27,14 @@ set target xc7a35tcpg236-1
 # Specify .xdc files location                   -- EDIT
 set xdc_files {
     constraints/top_vga_basys3.xdc
+    constraints/clk_wiz_0.xdc
 }
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
     ../rtl/vga_pkg.sv
+    rtl/clk_wiz_0.v
+    rtl/clk_wiz_0_clk_wiz.v
     ../rtl/vga_if.sv
     ../rtl/vga_timing.sv
     ../rtl/draw_bg.sv

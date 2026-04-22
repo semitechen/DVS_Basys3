@@ -68,8 +68,8 @@ module top_vga (
     );
 
     draw_rect #(
-        .X_POS(80),
-        .Y_POS(180),
+        .x_pos(80),
+        .y_pos(180),
         .WIDTH(640),
         .HEIGHT(240),
         .THICKNESS(5),

@@ -1,13 +1,14 @@
 module draw_rect #(
     parameter int WIDTH = 640,
+    parameter int x_pos,
+    parameter int y_pos,
     parameter int HEIGHT = 240,
     parameter int THICKNESS = 10,
     parameter logic [11:0] COLOR = 12'hf_0_0 
 )(
     input  logic clk,
     input  logic rst_n,
-    input logic x_pos,
-    input logic y_pos,
+    
     vga_if.in  vga_in,
     vga_if.out vga_out
 );

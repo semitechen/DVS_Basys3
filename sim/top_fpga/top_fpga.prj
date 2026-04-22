@@ -10,6 +10,8 @@
 
 
 sv work ../../rtl/vga_pkg.sv \
+        ../../fpga/rtl/clk_wiz_0.v \
+        ../../fpga/rtl/clk_wiz_0_clk_wiz.v \
         ../../rtl/vga_if.sv \
         ../../rtl/vga_timing.sv \
         ../../rtl/draw_bg.sv \
