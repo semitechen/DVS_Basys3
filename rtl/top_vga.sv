@@ -33,6 +33,8 @@ module top_vga (
      */
 
     logic [11:0] x_pos, y_pos;
+    logic [11:0] x_pos_meta, y_pos_meta;
+    logic [11:0] x_pos_sync, y_pos_sync;
 
     vga_if vga_bg();    
     vga_if vga_rect();  
@@ -53,6 +55,19 @@ module top_vga (
     /**
      * Submodules instances
      */
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            x_pos_meta <= 12'b0;
+            y_pos_meta <= 12'b0;
+            x_pos_sync <= 12'b0;
+            y_pos_sync <= 12'b0;
+        end else begin
+            x_pos_meta <= x_pos;
+            y_pos_meta <= y_pos;
+            x_pos_sync <= x_pos_meta;
+            y_pos_sync <= y_pos_meta;
+        end
+    end
 
     vga_timing u_vga_timing (
         .clk,
@@ -99,8 +114,8 @@ module top_vga (
     ) u_draw_rect (
         .clk     (clk),
         .rst_n   (rst_n),
-        .x_pos   (x_pos),
-        .y_pos   (y_pos),
+        .x_pos   (x_pos_sync),
+        .y_pos   (y_pos_sync),
         .vga_in  (vga_rect),
         .vga_out (vga_mouse)
     );
@@ -108,8 +123,8 @@ module top_vga (
     draw_mouse u_draw_mouse (
         .clk     (clk),
         .rst_n   (rst_n),
-        .x_pos   (x_pos),
-        .y_pos   (y_pos),
+        .x_pos   (x_pos_sync),
+        .y_pos   (y_pos_sync),
         .vga_in  (vga_mouse),
         .vga_out (vga_out)
     );
