@@ -119,7 +119,7 @@ module top_vga (
     draw_rect #(
         .WIDTH(48),
         .HEIGHT(64),
-        .THICKNESS(5),
+        .THICKNESS(0),
         .COLOR(12'hf_0_0) 
     ) u_draw_rect (
         .clk     (clk),

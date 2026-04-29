@@ -95,6 +95,8 @@ module top_fpga_tb;
         
         repeat(100) @(posedge hs);      
 
+        force dut.u_top_vga.x_pos = 12'd300;
+
         $finish;
     end
 

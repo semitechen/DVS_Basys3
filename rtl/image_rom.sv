@@ -32,7 +32,7 @@ reg [11:0] rom [0:4095];
  */
 
 /* Relative path from the simulation or synthesis working directory */
-initial $readmemh("image_rom.data", rom);
+initial $readmemh("/home/student/tjachymiak/code2/uec2-lab1-vga-gr1-kjelonek-tjachymiak/rtl/image_rom.data", rom);
 
 
 /**
