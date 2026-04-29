@@ -92,8 +92,8 @@ module top_fpga_tb;
         btnC = 1'b0;
         #(RST_START_TIME) btnC = 1'b1;
         #(RST_ACTIVE_TIME) btnC = 1'b0;
-
-        repeat(100) @(posedge hs);
+        
+        repeat(100) @(posedge hs);      
 
         $finish;
     end
