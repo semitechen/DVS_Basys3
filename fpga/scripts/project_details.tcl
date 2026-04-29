@@ -41,6 +41,7 @@ set sv_files {
     ../rtl/draw_bg.sv
     ../rtl/draw_rect.sv
     ../rtl/draw_mouse.sv
+    ../rtl/draw_rect_ctl.sv \
     ../rtl/top_vga.sv
     rtl/top_vga_basys3.sv
 }

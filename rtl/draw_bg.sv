@@ -37,7 +37,7 @@ module draw_bg (
             vga_out.vcount <= '0;
             vga_out.vsync  <= '0;
             vga_out.vblnk  <= '0;
-            vga_out.hcount<= '0;
+            vga_out.hcount <= '0;
             vga_out.hsync  <= '0;
             vga_out.hblnk  <= '0;
             vga_out.rgb    <= '0;

@@ -37,6 +37,9 @@ module top_vga (
      logic [11:0] x_pos_sync, y_pos_sync; 
      wire [11:0] pixel_addr;
      wire [11:0] rom_rgb;
+     wire mouse_left_click;
+     wire [11:0] phys_x_pos;
+    wire [11:0] phys_y_pos;
 
     vga_if vga_bg();    
     vga_if vga_rect();  
@@ -90,7 +93,7 @@ module top_vga (
         .xpos        (x_pos),
         .ypos        (y_pos),
         .zpos        (),
-        .left        (),
+        .left        (mouse_left_click),
         .middle      (),
         .right       (),
         .new_event   (),
@@ -124,8 +127,8 @@ module top_vga (
     ) u_draw_rect (
         .clk     (clk),
         .rst_n   (rst_n),
-        .x_pos   (x_pos_sync),
-        .y_pos   (y_pos_sync),
+        .x_pos   (phys_x_pos),
+        .y_pos   (phys_y_pos),
         .pixel_addr (pixel_addr),
         .rgb_pixel  (rom_rgb),
         .vga_in  (vga_rect),
@@ -140,6 +143,16 @@ module top_vga (
         .vga_in  (vga_mouse),
         .vga_out (vga_out)
     );
+
+    draw_rect_ctl u_draw_rect_ctl (
+    .clk        (clk),              
+    .rst_n      (rst_n),
+    .mouse_left (mouse_left_click),  
+    .mouse_xpos (x_pos_sync),        
+    .mouse_ypos (y_pos_sync),        
+    .xpos       (phys_x_pos),        
+    .ypos       (phys_y_pos)       
+);
 
 
 endmodule
