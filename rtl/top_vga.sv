@@ -124,10 +124,8 @@ module top_vga (
     ) u_draw_rect (
         .clk     (clk),
         .rst_n   (rst_n),
-        .x_pos   (x_pos_sync),
-        .y_pos   (y_pos_sync),
-        .pixel_addr (pixel_addr),
-        .rgb_pixel  (rom_rgb),
+        .x_pos   (x_pos),
+        .y_pos   (y_pos),
         .vga_in  (vga_rect),
         .vga_out (vga_mouse)
     );

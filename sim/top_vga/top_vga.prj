@@ -14,6 +14,7 @@ sv work ../common/tiff_writer.sv \
         ../../rtl/vga_if.sv \
         ../../rtl/vga_timing.sv \
         ../../rtl/draw_bg.sv \
+        ../../rtl/image_rom.sv \
         ../../rtl/draw_rect.sv \
         ../../rtl/draw_mouse.sv \
         ../../rtl/top_vga.sv \
