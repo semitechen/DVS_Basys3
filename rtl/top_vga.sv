@@ -117,15 +117,17 @@ module top_vga (
     );
 
     draw_rect #(
-        .WIDTH(640),
-        .HEIGHT(240),
+        .WIDTH(48),
+        .HEIGHT(64),
         .THICKNESS(5),
         .COLOR(12'hf_0_0) 
     ) u_draw_rect (
         .clk     (clk),
         .rst_n   (rst_n),
-        .x_pos   (x_pos),
-        .y_pos   (y_pos),
+        .x_pos   (x_pos_sync),
+        .y_pos   (y_pos_sync),
+        .pixel_addr (pixel_addr),
+        .rgb_pixel  (rom_rgb),
         .vga_in  (vga_rect),
         .vga_out (vga_mouse)
     );

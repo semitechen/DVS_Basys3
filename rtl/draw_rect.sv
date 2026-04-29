@@ -29,7 +29,7 @@ timeprecision 1ps;
     logic is_image_d1;
 
     
-    assign pixel_addr = (vga_in.vcount - y_pos) * 48 + (vga_in.hcount - x_pos);
+    
 
     always_comb begin
         inside_outer = (vga_in.hcount >= x_pos) &&
@@ -41,6 +41,10 @@ timeprecision 1ps;
                        (vga_in.hcount < (x_pos + WIDTH - THICKNESS)) &&
                        (vga_in.vcount >= (y_pos + THICKNESS)) &&
                        (vga_in.vcount < (y_pos + HEIGHT - THICKNESS));
+    end
+
+    always_ff @(posedge clk) begin
+        pixel_addr <= ((vga_in.vcount - y_pos) << 5) + ((vga_in.vcount - y_pos) << 4) + (vga_in.hcount - x_pos);
     end
 
     always_ff @(posedge clk or negedge rst_n) begin
@@ -55,6 +59,7 @@ timeprecision 1ps;
             vga_out.hcount <= '0; vga_out.hsync  <= '0; vga_out.hblnk <= '0;
             vga_out.rgb    <= '0;
         end else begin
+
             hcount_d1 <= vga_in.hcount;
             vcount_d1 <= vga_in.vcount;
             vsync_d1  <= vga_in.vsync;

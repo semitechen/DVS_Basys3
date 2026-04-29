@@ -37,6 +37,7 @@ set sv_files {
     rtl/clk_wiz_0_clk_wiz.v
     ../rtl/vga_if.sv
     ../rtl/vga_timing.sv
+    ../rtl/image_rom.sv
     ../rtl/draw_bg.sv
     ../rtl/draw_rect.sv
     ../rtl/draw_mouse.sv
@@ -57,6 +58,6 @@ set vhdl_files {
 }
 
 # Specify files for a memory initialization     -- EDIT
-# set mem_files {
-#    path/to/file.data
-# }
+ set mem_files {
+    ../rtl/image_rom.data
+ }
