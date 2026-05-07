@@ -36,11 +36,16 @@ module draw_rect_char #(
     logic [3:0] char_line_nxt, char_line_d1;
     logic [7:0] char_xy_nxt;
 
+    logic [10:0] h_offset, v_offset;
+
     /**
      * T0: Address Calculation & Registration (to fix DRC async reset warning)
      */
-    assign char_xy_nxt   = { (vga_in.vcount - Y_POS[10:0])[6:4], (vga_in.hcount - X_POS[10:0])[7:3] };
-    assign char_line_nxt = (vga_in.vcount - Y_POS[10:0])[3:0];
+    assign h_offset = vga_in.hcount - X_POS[10:0];
+    assign v_offset = vga_in.vcount - Y_POS[10:0];
+
+    assign char_xy_nxt   = { v_offset[6:4], h_offset[7:3] };
+    assign char_line_nxt = v_offset[3:0];
     assign is_rect_nxt   = (vga_in.hcount >= X_POS) && (vga_in.hcount < X_POS + 256) && 
                            (vga_in.vcount >= Y_POS) && (vga_in.vcount < Y_POS + 128);
 
