@@ -114,12 +114,20 @@ module top_vga (
         .vga_out (vga_char)
     );
 
-    logic [10:0] char_addr;
+    logic [7:0] char_xy;
+    logic [3:0] char_line;
+    logic [6:0] char_code;
     logic [7:0] char_pixels;
+
+    char_rom u_char_rom (
+        .clk,
+        .char_xy (char_xy),
+        .char_code (char_code)
+    );
 
     font_rom u_font_rom (
         .clk,
-        .addr (char_addr),
+        .addr ({char_code, char_line}),
         .char_line_pixels (char_pixels)
     );
 
@@ -127,7 +135,8 @@ module top_vga (
         .clk,
         .rst_n,
         .char_line_pixels (char_pixels),
-        .addr (char_addr),
+        .char_xy (char_xy),
+        .char_line (char_line),
         .vga_in (vga_char),
         .vga_out (vga_rect)
     );
