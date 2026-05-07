@@ -1,11 +1,3 @@
-/**
- * Copyright (C) 2025  AGH University of Science and Technology
- * MTM UEC2
- * Author: Piotr Kaczmarczyk
- *
- * Description:
- * Draw character rectangle.
- */
 
 `timescale 1ns / 1ps
 
@@ -36,8 +28,15 @@ module draw_rect_char #(
     logic is_rect_d1, is_rect_d2;
 
     // T0: Position calculation
-    assign char_xy   = { (vga_in.vcount - Y_POS[10:0])[6:4], (vga_in.hcount - X_POS[10:0])[7:3] };
-    assign char_line = (vga_in.vcount - Y_POS[10:0])[3:0];
+
+    logic [11:0] x_rel;
+    logic [11:0] y_rel;
+
+    assign x_rel = vga_in.hcount - X_POS[10:0];
+    assign y_rel = vga_in.vcount - Y_POS[10:0];
+
+    assign char_xy   = { y_rel[6:4], x_rel[7:3] };
+    assign char_line = y_rel[3:0];
     
     wire is_rect = (vga_in.hcount >= X_POS) && (vga_in.hcount < X_POS + 256) && 
                    (vga_in.vcount >= Y_POS) && (vga_in.vcount < Y_POS + 128);
