@@ -37,6 +37,9 @@ set sv_files {
     rtl/clk_wiz_0_clk_wiz.v
     ../rtl/vga_if.sv
     ../rtl/vga_timing.sv
+    ../rtl/font_rom.sv
+    ../rtl/delay.sv
+    ../rtl/draw_rect_char.sv
     ../rtl/image_rom.sv
     ../rtl/draw_bg.sv
     ../rtl/draw_rect.sv

@@ -42,6 +42,7 @@ module top_vga (
     wire [11:0] phys_y_pos;
 
     vga_if vga_bg();    
+    vga_if vga_char();
     vga_if vga_rect();  
     vga_if vga_mouse();
     vga_if vga_out();
@@ -110,6 +111,24 @@ module top_vga (
         .clk,
         .rst_n,
         .vga_in  (vga_bg),
+        .vga_out (vga_char)
+    );
+
+    logic [10:0] char_addr;
+    logic [7:0] char_pixels;
+
+    font_rom u_font_rom (
+        .clk,
+        .addr (char_addr),
+        .char_line_pixels (char_pixels)
+    );
+
+    draw_rect_char u_draw_rect_char (
+        .clk,
+        .rst_n,
+        .char_line_pixels (char_pixels),
+        .addr (char_addr),
+        .vga_in (vga_char),
         .vga_out (vga_rect)
     );
 
