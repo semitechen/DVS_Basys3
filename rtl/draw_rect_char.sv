@@ -9,7 +9,10 @@
 
 `timescale 1ns / 1ps
 
-module draw_rect_char (
+module draw_rect_char #(
+    parameter int X_POS = 0,
+    parameter int Y_POS = 0
+)(
     input  logic clk,
     input  logic rst_n,
     input  logic [7:0] char_line_pixels,
@@ -33,10 +36,11 @@ module draw_rect_char (
     logic is_rect_d1, is_rect_d2;
 
     // T0: Position calculation
-    assign char_xy   = {vga_in.vcount[6:4], vga_in.hcount[7:3]};
-    assign char_line = vga_in.vcount[3:0];
+    assign char_xy   = { (vga_in.vcount - Y_POS[10:0])[6:4], (vga_in.hcount - X_POS[10:0])[7:3] };
+    assign char_line = (vga_in.vcount - Y_POS[10:0])[3:0];
     
-    wire is_rect = (vga_in.hcount < 256) && (vga_in.vcount < 128);
+    wire is_rect = (vga_in.hcount >= X_POS) && (vga_in.hcount < X_POS + 256) && 
+                   (vga_in.vcount >= Y_POS) && (vga_in.vcount < Y_POS + 128);
 
     // T1: Latency for char_rom
     delay #(.WIDTH(1), .CLK_DEL(1)) u_delay_is_rect_1 (.clk, .rst_n, .din(is_rect), .dout(is_rect_d1));

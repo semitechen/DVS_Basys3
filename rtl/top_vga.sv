@@ -131,7 +131,10 @@ module top_vga (
         .char_line_pixels (char_pixels)
     );
 
-    draw_rect_char u_draw_rect_char (
+    draw_rect_char #(
+        .X_POS(200),
+        .Y_POS(100)
+    ) u_draw_rect_char (
         .clk,
         .rst_n,
         .char_line_pixels (char_pixels),
