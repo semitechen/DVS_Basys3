@@ -1,0 +1,32 @@
+Warnings, critical warnings and errors from synthesis and implementation
+
+Created: 2026-05-14 00:52:42
+
+----SYNTHESIS----
+WARNING: [Synth 8-3330] design top_dvs_basys3 has an empty top module
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_cs driven by constant 1
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_mosi driven by constant 0
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_sck driven by constant 0
+WARNING: [Synth 8-7129] Port clk in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rst in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port btn_up in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port btn_down in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sd_miso in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vauxp6 in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vauxn6 in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3330] design top_dvs_basys3 has an empty top module
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_cs driven by constant 1
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_mosi driven by constant 0
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_sck driven by constant 0
+WARNING: [Synth 8-7129] Port clk in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port rst in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port btn_up in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port btn_down in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sd_miso in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vauxp6 in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vauxn6 in module top_dvs_basys3 is either unconnected or has no load
+
+----IMPLEMENTATION----
+WARNING: [Power 33-232] No user defined clocks were found in the design! Power estimation will be inaccurate until this is corrected.
+WARNING: [Timing 38-313] There are no user specified timing constraints. Timing constraints are needed for proper timing analysis.
