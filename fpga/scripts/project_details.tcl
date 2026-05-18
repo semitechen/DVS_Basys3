@@ -33,6 +33,7 @@ set xdc_files {
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
     ../rtl/top_dvs_basys3.sv
+    ../rtl/track_lut.sv
 }
 
 # Specify Verilog design files location         -- EDIT

@@ -41,3 +41,5 @@ results/*
 
 !results/*.bit
 !results/warning_summary.log
+
+tools/audio_in/
