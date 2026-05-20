@@ -209,8 +209,8 @@ set_property PACKAGE_PIN P18 [get_ports sd_sck]
 set_property PACKAGE_PIN J3 [get_ports vauxp6]
     set_property IOSTANDARD LVCMOS33 [get_ports vauxp6]
 ##Sch name = XA2_P
-#set_property PACKAGE_PIN L3 [get_ports {JXADC[1]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[1]}]
+set_property PACKAGE_PIN L3 [get_ports vauxp14]
+	set_property IOSTANDARD LVCMOS33 [get_ports vauxp14]
 ##Sch name = XA3_P
 #set_property PACKAGE_PIN M2 [get_ports {JXADC[2]}]
 	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[2]}]
@@ -221,8 +221,8 @@ set_property PACKAGE_PIN J3 [get_ports vauxp6]
 set_property PACKAGE_PIN K3 [get_ports vauxn6]
     set_property IOSTANDARD LVCMOS33 [get_ports vauxn6]
 ##Sch name = XA2_N
-#set_property PACKAGE_PIN M3 [get_ports {JXADC[5]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[5]}]
+set_property PACKAGE_PIN M3 [get_ports vauxn14]
+	set_property IOSTANDARD LVCMOS33 [get_ports vauxn14]
 ##Sch name = XA3_N
 #set_property PACKAGE_PIN M1 [get_ports {JXADC[6]}]
 	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[6]}]
