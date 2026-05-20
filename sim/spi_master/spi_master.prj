@@ -1,0 +1,2 @@
+sv work ../../rtl/spi_master.sv
+sv work spi_master_tb.sv
