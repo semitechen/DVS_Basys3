@@ -30,12 +30,9 @@ module top_dvs_basys3 (
     assign sd_mosi = 1'b0;
     assign sd_sck  = 1'b0;
 
-    logic [6:0]  adc_daddr;
-    logic        adc_den;
-    logic [15:0] adc_do;
-    logic        adc_drdy;
-    logic [4:0]  adc_channel;
-    logic        adc_eoc;
+    logic [11:0] adc_data_l;
+    logic [11:0] adc_data_r;
+    logic        adc_data_valid;
 
     xadc_interface xadc_inst (
         .clk(clk),
@@ -44,16 +41,9 @@ module top_dvs_basys3 (
         .vauxn6(vauxn6),
         .vauxp14(vauxp14),
         .vauxn14(vauxn14),
-        .daddr(adc_daddr),
-        .den(den_dummy), // Temporarily tied
-        .do_out(adc_do),
-        .drdy(adc_drdy),
-        .channel_out(adc_channel),
-        .eoc_out(adc_eoc)
+        .data_l(adc_data_l),
+        .data_r(adc_data_r),
+        .data_valid(adc_data_valid)
     );
-
-    logic den_dummy;
-    assign adc_daddr = 7'h0;
-    assign den_dummy = 1'b0;
 
 endmodule
