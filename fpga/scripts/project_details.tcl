@@ -35,7 +35,6 @@ set sv_files {
     ../rtl/top_dvs_basys3.sv
     ../rtl/track_lut.sv
     ../rtl/xadc_interface.sv
-    ../rtl/uart_tx.sv
 }
 
 # Specify Verilog design files location         -- EDIT

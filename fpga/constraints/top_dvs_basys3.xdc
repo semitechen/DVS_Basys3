@@ -266,8 +266,8 @@ set_property PACKAGE_PIN M3 [get_ports vauxn14]
 ##USB-RS232 Interface
 #set_property PACKAGE_PIN B18 [get_ports RsRx]
 	#set_property IOSTANDARD LVCMOS33 [get_ports RsRx]
-set_property PACKAGE_PIN A18 [get_ports uart_tx_pin]
-	set_property IOSTANDARD LVCMOS33 [get_ports uart_tx_pin]
+#set_property PACKAGE_PIN A18 [get_ports uart_tx_pin]
+	#set_property IOSTANDARD LVCMOS33 [get_ports uart_tx_pin]
 
 
 ##USB HID (PS/2)
