@@ -48,9 +48,9 @@ module xadc_interface (
                 READ_WAIT: begin
                     den <= 1'b0;
                     if (drdy) begin
-                        if (channel_out == 5'h06) begin
+                        if (channel_out == 5'h16) begin // VAUX6
                             data_l <= do_out[15:4];
-                        end else if (channel_out == 5'h0E) begin
+                        end else if (channel_out == 5'h1E) begin // VAUX14
                             data_r <= do_out[15:4];
                             data_valid <= 1'b1;
                         end

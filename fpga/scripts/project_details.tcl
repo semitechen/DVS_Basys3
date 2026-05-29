@@ -16,7 +16,7 @@
 set project_name dvs_system
 
 # Top module name                               -- EDIT
-set top_module top_vga_basys3
+set top_module top_dvs_basys3
 
 # FPGA device
 set target xc7a35tcpg236-1
@@ -35,6 +35,7 @@ set sv_files {
     ../rtl/top_dvs_basys3.sv
     ../rtl/track_lut.sv
     ../rtl/xadc_interface.sv
+    ../rtl/uart_tx.sv
 }
 
 # Specify Verilog design files location         -- EDIT
