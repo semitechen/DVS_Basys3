@@ -1,0 +1,3 @@
+sv work ../../rtl/spi_master.sv
+sv work ../../rtl/sd_card_controller.sv
+sv work sd_card_controller_tb.sv
