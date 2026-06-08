@@ -1,0 +1,2 @@
+sv work ../../rtl/audio_fifo.sv
+sv work audio_fifo_tb.sv
