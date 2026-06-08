@@ -35,6 +35,7 @@ set sv_files {
     ../rtl/top_dvs_basys3.sv
     ../rtl/track_lut.sv
     ../rtl/spi_master.sv
+    ../rtl/audio_fifo.sv
     ../rtl/sd_card_controller.sv
 }
 
