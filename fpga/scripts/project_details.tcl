@@ -37,6 +37,7 @@ set sv_files {
     ../rtl/spi_master.sv
     ../rtl/audio_fifo.sv
     ../rtl/sd_card_controller.sv
+    ../rtl/sd_bram_bridge.sv
 }
 
 # Specify Verilog design files location         -- EDIT

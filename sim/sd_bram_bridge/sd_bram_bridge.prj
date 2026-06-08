@@ -1,0 +1,2 @@
+sv work ../../rtl/sd_bram_bridge.sv
+sv work sd_bram_bridge_tb.sv
