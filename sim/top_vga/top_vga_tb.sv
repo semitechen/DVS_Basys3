@@ -38,9 +38,10 @@ module top_vga_tb;
      * Local variables and signals
      */
 
-    logic clk, rst;
+    logic clk, clk100MHz, rst_n;
     wire vs, hs;
     wire [3:0] r, g, b;
+    wire ps2_clk, ps2_data;
 
 
     /**
@@ -52,20 +53,28 @@ module top_vga_tb;
         forever #(CLK_PERIOD/2) clk = ~clk;
     end
 
+    initial begin
+        clk100MHz = 1'b0;
+        forever #(10/2) clk100MHz = ~clk100MHz;
+    end
+
 
     /**
      * Submodules instances
      */
 
-    top_vga dut (
-        .clk(clk),
-        .rst(rst),
-        .vs(vs),
-        .hs(hs),
-        .r(r),
-        .g(g),
-        .b(b)
-    );
+   top_vga dut (
+    .clk(clk),
+    .rst_n(rst_n),
+    .clk100MHz(clk100MHz),
+    .ps2_clk(ps2_clk),
+    .ps2_data(ps2_data),
+    .r(r),
+    .g(g),
+    .b(b),
+    .hs(hs),
+    .vs(vs)
+);
 
     tiff_writer #(
         .XDIM(16'd1056),
@@ -80,25 +89,23 @@ module top_vga_tb;
     );
 
 
+
+
+
     /**
      * Main test
      */
 
     initial begin
-        rst = 1'b0;
-        #(RST_START_TIME) rst = 1'b1;
-        #(RST_ACTIVE_TIME) rst = 1'b0;
+        rst_n = 1'b1;
+        #(RST_START_TIME) rst_n = 1'b0;
+        #(RST_ACTIVE_TIME) rst_n = 1'b1;
 
-        $display("If simulation ends before the testbench");
-        $display("completes, use the menu option to run all.");
-        $display("Prepare to wait a long time...");
+        @(posedge vs);
+        @(negedge vs);
+        @(posedge vs);
+        @(negedge vs);
 
-        wait (vs == 1'b0);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-        @(negedge vs) $display("Info: negedge VS at %t",$time);
-
-        // End the simulation.
-        $display("Simulation is over, check the waveforms.");
         $finish;
     end
 

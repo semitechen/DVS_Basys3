@@ -9,23 +9,10 @@
 
 module draw_bg (
         input  logic clk,
-        input  logic rst,
+        input  logic rst_n,
 
-        input  logic [10:0] vcount_in,
-        input  logic        vsync_in,
-        input  logic        vblnk_in,
-        input  logic [10:0] hcount_in,
-        input  logic        hsync_in,
-        input  logic        hblnk_in,
-
-        output logic [10:0] vcount_out,
-        output logic        vsync_out,
-        output logic        vblnk_out,
-        output logic [10:0] hcount_out,
-        output logic        hsync_out,
-        output logic        hblnk_out,
-
-        output logic [11:0] rgb_out
+        vga_if.in  vga_in,
+        vga_if.out vga_out
     );
 
     timeunit 1ns;
@@ -45,43 +32,59 @@ module draw_bg (
      * Internal logic
      */
 
-    always_ff @(posedge clk) begin : bg_ff_blk
-        if (rst) begin
-            vcount_out <= '0;
-            vsync_out  <= '0;
-            vblnk_out  <= '0;
-            hcount_out <= '0;
-            hsync_out  <= '0;
-            hblnk_out  <= '0;
-            rgb_out    <= '0;
+    always_ff @(posedge clk or negedge rst_n) begin : bg_ff_blk
+        if (!rst_n) begin
+            vga_out.vcount <= '0;
+            vga_out.vsync  <= '0;
+            vga_out.vblnk  <= '0;
+            vga_out.hcount <= '0;
+            vga_out.hsync  <= '0;
+            vga_out.hblnk  <= '0;
+            vga_out.rgb    <= '0;
         end else begin
-            vcount_out <= vcount_in;
-            vsync_out  <= vsync_in;
-            vblnk_out  <= vblnk_in;
-            hcount_out <= hcount_in;
-            hsync_out  <= hsync_in;
-            hblnk_out  <= hblnk_in;
-            rgb_out    <= rgb_nxt;
+            vga_out.vcount <= vga_in.vcount;
+            vga_out.vsync  <= vga_in.vsync;
+            vga_out.vblnk  <= vga_in.vblnk;
+            vga_out.hcount <= vga_in.hcount;
+            vga_out.hsync  <= vga_in.hsync;
+            vga_out.hblnk  <= vga_in.hblnk;
+            vga_out.rgb    <= rgb_nxt;
         end
     end
 
     always_comb begin : bg_comb_blk
-        if (vblnk_in || hblnk_in) begin             // Blanking region:
-            rgb_nxt = 12'h0_0_0;                    // - make it it black.
-        end else begin                              // Active region:
-            if (vcount_in == 0)                     // - top edge:
-                rgb_nxt = 12'hf_f_0;                // - - make a yellow line.
-            else if (vcount_in == VER_PIXELS - 1)   // - bottom edge:
-                rgb_nxt = 12'hf_0_0;                // - - make a red line.
-            else if (hcount_in == 0)                // - left edge:
-                rgb_nxt = 12'h0_f_0;                // - - make a green line.
-            else if (hcount_in == HOR_PIXELS - 1)   // - right edge:
-                rgb_nxt = 12'h0_0_f;                // - - make a blue line.
+        logic draw_T, draw_J1, draw_K, draw_J2;
 
-            // Add your code here.
+        //T X: 100-200, Y: 200-400
+        draw_T = (vga_in.hcount >= 100 && vga_in.hcount < 200 && vga_in.vcount >= 200 && vga_in.vcount < 220) || // Górna belka
+                 (vga_in.hcount >= 140 && vga_in.hcount < 160 && vga_in.vcount >= 220 && vga_in.vcount < 400);   // Pionowy słupek
 
-            else                                    // The rest of active display pixels:
-                rgb_nxt = 12'h8_8_8;                // - fill with gray.
+        // Pierwsze J (X: 220-300, Y: 200-400)
+        draw_J1 = (vga_in.hcount >= 280 && vga_in.hcount < 300 && vga_in.vcount >= 200 && vga_in.vcount < 400) || // Prawy słupek
+                  (vga_in.hcount >= 220 && vga_in.hcount < 300 && vga_in.vcount >= 380 && vga_in.vcount < 400) || // Dolna belka
+                  (vga_in.hcount >= 220 && vga_in.hcount < 240 && vga_in.vcount >= 320 && vga_in.vcount < 400) || // Lewy haczyk
+                  (vga_in.hcount >= 220 && vga_in.hcount < 300 && vga_in.vcount >= 200 && vga_in.vcount < 220);   // Górna belka
+
+        //K X: 450-570, Y: 200-400
+        draw_K = (vga_in.hcount >= 450 && vga_in.hcount < 470 && vga_in.vcount >= 200 && vga_in.vcount < 400) || // Pionowy słupek
+                 (vga_in.hcount >= 470 && vga_in.hcount < 570 && vga_in.vcount >= 300 - (vga_in.hcount - 470) && vga_in.vcount < 320 - (vga_in.hcount - 470)) || // Górne ramię
+                 (vga_in.hcount >= 470 && vga_in.hcount < 570 && vga_in.vcount >= 280 + (vga_in.hcount - 470) && vga_in.vcount < 300 + (vga_in.hcount - 470));   // Dolne ramię
+
+        // Drugie J X: 620-700, Y: 200-400
+        draw_J2 = (vga_in.hcount >= 680 && vga_in.hcount < 700 && vga_in.vcount >= 200 && vga_in.vcount < 400) || // Prawy słupek
+                  (vga_in.hcount >= 620 && vga_in.hcount < 700 && vga_in.vcount >= 380 && vga_in.vcount < 400) || // Dolna belka
+                  (vga_in.hcount >= 620 && vga_in.hcount < 640 && vga_in.vcount >= 320 && vga_in.vcount < 400) || // Lewy haczyk
+                  (vga_in.hcount >= 620 && vga_in.hcount < 700 && vga_in.vcount >= 200 && vga_in.vcount < 220);   // Górna belka
+
+        if (vga_in.vblnk || vga_in.hblnk) begin
+            rgb_nxt = 12'h0_0_0;
+        end else begin
+            if (vga_in.vcount == 0) rgb_nxt = 12'hf_f_0;
+            else if (vga_in.vcount == VER_PIXELS - 1) rgb_nxt = 12'hf_0_0;
+            else if (vga_in.hcount == 0) rgb_nxt = 12'h0_f_0;
+            else if (vga_in.hcount == HOR_PIXELS - 1) rgb_nxt = 12'h0_0_f;
+            else if (draw_T || draw_J1 || draw_K || draw_J2) rgb_nxt = 12'h7_f_d; // aquamarine
+            else rgb_nxt = 12'h0_0_0;
         end
     end
 
