@@ -5,18 +5,14 @@
 # Description:
 # Project detiles required for generate_bitstream.tcl
 # Make sure that project_name, top_module and target are correct.
-# Provide paths to all the files required for synthesis and implementation.
-# Depending on the file type, it should be added in the corresponding section.
-# If the project does not use files of some type, leave the corresponding section commented out.
+# sv_files and vhdl_files should contain all files required for synthesis.
 
-#-----------------------------------------------------#
-#                   Project details                   #
 #-----------------------------------------------------#
 # Project name                                  -- EDIT
 set project_name dvs_system
 
 # Top module name                               -- EDIT
-set top_module top_dac_test
+set top_module top_vga_basys3
 
 # FPGA device
 set target xc7a35tcpg236-1
@@ -26,7 +22,9 @@ set target xc7a35tcpg236-1
 #-----------------------------------------------------#
 # Specify .xdc files location                   -- EDIT
 set xdc_files {
-    constraints/top_dac_test.xdc
+    constraints/top_dvs_basys3.xdc
+    constraints/top_vga_basys3.xdc
+    constraints/clk_wiz_0.xdc
 }
 
 # Specify SystemVerilog design files location   -- EDIT
@@ -54,7 +52,6 @@ set sv_files {
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
     ../rtl/ds_dac.sv
-    ../rtl/top_dac_test.sv
 }
 
 # Specify Verilog design files location         -- EDIT
