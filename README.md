@@ -260,3 +260,29 @@ To safely connect an RCA line-level signal (2V p-p, centered at 0V) to the Basys
 | **Direct Wire** | RCA Ground (Outer) | JXADC Pin 7 / Pin 8 (`vauxn6` / `vauxn14`) |
 
 **Technical Note:** The Artix-7 XADC input range is 0V-1V. The circuit above biases the signal to ~0.6V and provides high-pass coupling to protect the FPGA from negative voltages.
+
+## Active Audio Output Filter
+
+To achieve professional-grade audio quality, the Delta-Sigma bitstream from the FPGA must be processed by an external Active Sallen-Key Low-Pass Filter.
+
+![Sallen-Key Filter Architecture](sallenKey.png)
+
+### Filter Components
+
+| Component | Value |
+| :--- | :--- |
+| **R1** | 1 kΩ |
+| **R2** | 1 kΩ |
+| **C1** | 10 nF |
+| **C2** | 4.7 nF |
+
+### Connection Diagram
+
+Connect the Basys3 board to your external filter circuit using the **Pmod JA** header:
+
+| Basys3 Port | Pmod JA Pin | Filter Connection |
+| :--- | :--- | :--- |
+| **JA1 (Signal)** | Pin 1 | Filter Input (R1) |
+| **GND** | Pin 5 | Circuit Ground |
+
+**Note:** The output of the op-amp should be AC-coupled (using a 10µF capacitor) before connecting to a DJ mixer or line-level input to remove the DC offset.

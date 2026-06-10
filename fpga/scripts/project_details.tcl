@@ -5,12 +5,8 @@
 # Description:
 # Project detiles required for generate_bitstream.tcl
 # Make sure that project_name, top_module and target are correct.
-# Provide paths to all the files required for synthesis and implementation.
-# Depending on the file type, it should be added in the corresponding section.
-# If the project does not use files of some type, leave the corresponding section commented out.
+# sv_files and vhdl_files should contain all files required for synthesis.
 
-#-----------------------------------------------------#
-#                   Project details                   #
 #-----------------------------------------------------#
 # Project name                                  -- EDIT
 set project_name dvs_system
@@ -55,6 +51,7 @@ set sv_files {
     ../rtl/audio_fifo.sv
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
+    ../rtl/ds_dac.sv
 }
 
 # Specify Verilog design files location         -- EDIT
