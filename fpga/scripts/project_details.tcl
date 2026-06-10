@@ -27,11 +27,28 @@ set target xc7a35tcpg236-1
 # Specify .xdc files location                   -- EDIT
 set xdc_files {
     constraints/top_dvs_basys3.xdc
-    
+    constraints/top_vga_basys3.xdc
+    constraints/clk_wiz_0.xdc
 }
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
+    ../rtl/vga_pkg.sv
+    rtl/clk_wiz_0.v
+    rtl/clk_wiz_0_clk_wiz.v
+    ../rtl/vga_if.sv
+    ../rtl/vga_timing.sv
+    ../rtl/font_rom.sv
+    ../rtl/delay.sv
+    ../rtl/char_rom.sv
+    ../rtl/draw_rect_char.sv
+    ../rtl/image_rom.sv
+    ../rtl/draw_bg.sv
+    ../rtl/draw_rect.sv
+    ../rtl/draw_mouse.sv
+    ../rtl/draw_rect_ctl.sv
+    ../rtl/top_vga.sv
+    rtl/top_vga_basys3.sv
     ../rtl/top_dvs_basys3.sv
     ../rtl/track_lut.sv
     ../rtl/spi_master.sv
@@ -46,9 +63,13 @@ set sv_files {
 # }
 
 # Specify VHDL design files location            -- EDIT
-#set vhdl_files {
-#}
+set vhdl_files {
+    ../rtl/Ps2Interface.vhd
+    ../rtl/MouseCtl.vhd
+    ../rtl/MouseDisplay.vhd
+}
 
 # Specify files for a memory initialization     -- EDIT
- #set mem_files {   
- #}
+ set mem_files {
+    ../rtl/image_rom.data
+ }

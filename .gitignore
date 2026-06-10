@@ -4,6 +4,7 @@
 #
 # Description:
 # List of files and directories not to be tracked by git.
+# They will be removed when cleaning the project directory.
 
 # Ignorowanie plików generowanych przez środowisko Vivado
 fpga/build
@@ -36,9 +37,7 @@ dvt_build.log
 xcelium.d
 xrun.log
 
-
 results/*
-
 !results/*.bit
 !results/warning_summary.log
 

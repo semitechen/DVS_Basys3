@@ -1,31 +1,71 @@
 `timescale 1ns / 1ps
+/**
+ * Module: top_dvs_basys3
+ * Project: DVS_Basys3 (Digital Vinyl System)
+ * Description: Top-level module for the DVS system.
+ *              Integrates XADC for timecode signal acquisition.
+ */
 
 module top_dvs_basys3 (
-    // Zegar i reset
+    // System Clock and Reset
     input  logic clk,
     input  logic rst,
 
-    // Przyciski interfejsu użytkownika
+    // User Interface (Buttons)
     input  logic btn_up,
     input  logic btn_down,
 
-    // Interfejs SPI karty SD (Pmod JC)
+    // SD Card SPI Interface
     output logic sd_cs,
     output logic sd_mosi,
     input  logic sd_miso,
     output logic sd_sck,
 
-    // Wejście analogowe z gramofonu (Pmod JXADC)
-    input  logic vauxp6,
-    input  logic vauxn6
+    // XADC Analog Auxiliary Inputs (JXADC Header)
+    input  logic vauxp6,    // Channel 6 - Left P
+    input  logic vauxn6,    // Channel 6 - Left N
+    input  logic vauxp14,   // Channel 14 - Right P
+    input  logic vauxn14,   // Channel 14 - Right N
+
+    // Board LEDs
+    output logic [15:0] led
 );
 
-    // --- TYMCZASOWA LOGIKA DO TESTU BOJOWEGO ---
-    // Przypisujemy bezpieczne, stałe wartości do wyjść, 
-    // aby Vivado nie krzyczało o "wiszących" (floating) pinach.
-    
-    assign sd_cs   = 1'b1; // Aktywny stan niski, więc 1 oznacza brak komunikacji
+    // --- Internal Signals ---
+    logic [11:0] adc_data_l;
+    logic [11:0] adc_data_r;
+    logic        adc_data_valid;
+
+
+    // --- Constant Assignments ---
+    assign sd_cs   = 1'b1; 
     assign sd_mosi = 1'b0;
     assign sd_sck  = 1'b0;
+
+
+    // --- 1. XADC Interface Instance ---
+    xadc_interface xadc_inst (
+        .clk(clk),
+        .rst(rst),
+        .vauxp6(vauxp6),
+        .vauxn6(vauxn6),
+        .vauxp14(vauxp14),
+        .vauxn14(vauxn14),
+        .data_l(adc_data_l),
+        .data_r(adc_data_r),
+        .data_valid(adc_data_valid)
+    );
+
+
+    // --- 2. Diagnostic Logic (Heartbeat & VU Meter) ---
+    logic [26:0] heartbeat_cnt;
+    always_ff @(posedge clk) begin
+        if (rst) heartbeat_cnt <= 0;
+        else     heartbeat_cnt <= heartbeat_cnt + 1;
+    end
+
+    assign led[15]   = heartbeat_cnt[26]; // Heartbeat blinker (~0.7Hz)
+    assign led[7:0]  = adc_data_l[11:4];  // Left Channel Intensity
+    assign led[14:8] = adc_data_r[11:5];  // Right Channel Intensity
 
 endmodule
