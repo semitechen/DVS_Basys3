@@ -16,7 +16,7 @@
 set project_name dvs_system
 
 # Top module name                               -- EDIT
-set top_module top_vga_basys3
+set top_module top_dac_test
 
 # FPGA device
 set target xc7a35tcpg236-1
@@ -55,6 +55,8 @@ set sv_files {
     ../rtl/audio_fifo.sv
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
+    ../rtl/ds_dac.sv
+    ../rtl/top_dac_test.sv
 }
 
 # Specify Verilog design files location         -- EDIT
