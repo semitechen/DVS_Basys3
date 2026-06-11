@@ -45,6 +45,10 @@ assign sd_mosi = 1'b0;
 assign sd_sck  = 1'b0;
 
 
+logic [31:0] tc_period;
+logic        tc_period_valid;
+
+
 // --- 1. XADC Interface Instance ---
 xadc_interface xadc_inst (
     .clk(clk),
@@ -75,8 +79,19 @@ timecode_filter filter_r (
     .y_out(filtered_data_r)
 );
 
+// --- 3. Speed Detection ---
+timecode_speed_detector speed_det (
+    .clk(clk),
+    .rst(rst),
+    .signal_in(filtered_data_l),
+    .signal_valid(adc_data_valid),
+    .period_out(tc_period),
+    .period_valid(tc_period_valid)
+);
 
-// --- 3. Diagnostic Logic (Heartbeat & VU Meter) ---
+
+// --- 4. Diagnostic Logic (Heartbeat & VU Meter) ---
+
 logic [26:0] heartbeat_cnt;
 always_ff @(posedge clk) begin
     if (rst) heartbeat_cnt <= 0;
@@ -84,8 +99,6 @@ always_ff @(posedge clk) begin
 end
 
 assign led[15]   = heartbeat_cnt[26]; // Heartbeat blinker (~0.7Hz)
-assign led[7:0]  = filtered_data_l[15:8];  // Filtered Left Channel (MSBs)
-assign led[14:8] = filtered_data_r[15:9];  // Filtered Right Channel (MSBs)
-
+assign led[14:0] = tc_period[20:6];   // Show portion of the period (speed)
 
 endmodule
