@@ -52,6 +52,7 @@ set sv_files {
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
     ../rtl/ds_dac.sv
+    ../rtl/timecode_filter.sv
 }
 
 # Specify Verilog design files location         -- EDIT

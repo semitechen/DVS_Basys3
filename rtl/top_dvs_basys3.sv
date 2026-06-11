@@ -30,42 +30,62 @@ module top_dvs_basys3 (
     // Board LEDs
     output logic [15:0] led
 );
+// --- Internal Signals ---
+logic [11:0] adc_data_l;
+logic [11:0] adc_data_r;
+logic        adc_data_valid;
 
-    // --- Internal Signals ---
-    logic [11:0] adc_data_l;
-    logic [11:0] adc_data_r;
-    logic        adc_data_valid;
-
-
-    // --- Constant Assignments ---
-    assign sd_cs   = 1'b1; 
-    assign sd_mosi = 1'b0;
-    assign sd_sck  = 1'b0;
+logic [15:0] filtered_data_l;
+logic [15:0] filtered_data_r;
 
 
-    // --- 1. XADC Interface Instance ---
-    xadc_interface xadc_inst (
-        .clk(clk),
-        .rst(rst),
-        .vauxp6(vauxp6),
-        .vauxn6(vauxn6),
-        .vauxp14(vauxp14),
-        .vauxn14(vauxn14),
-        .data_l(adc_data_l),
-        .data_r(adc_data_r),
-        .data_valid(adc_data_valid)
-    );
+// --- Constant Assignments ---
+assign sd_cs   = 1'b1; 
+assign sd_mosi = 1'b0;
+assign sd_sck  = 1'b0;
 
 
-    // --- 2. Diagnostic Logic (Heartbeat & VU Meter) ---
-    logic [26:0] heartbeat_cnt;
-    always_ff @(posedge clk) begin
-        if (rst) heartbeat_cnt <= 0;
-        else     heartbeat_cnt <= heartbeat_cnt + 1;
-    end
+// --- 1. XADC Interface Instance ---
+xadc_interface xadc_inst (
+    .clk(clk),
+    .rst(rst),
+    .vauxp6(vauxp6),
+    .vauxn6(vauxn6),
+    .vauxp14(vauxp14),
+    .vauxn14(vauxn14),
+    .data_l(adc_data_l),
+    .data_r(adc_data_r),
+    .data_valid(adc_data_valid)
+);
 
-    assign led[15]   = heartbeat_cnt[26]; // Heartbeat blinker (~0.7Hz)
-    assign led[7:0]  = adc_data_l[11:4];  // Left Channel Intensity
-    assign led[14:8] = adc_data_r[11:5];  // Right Channel Intensity
+// --- 2. Filter Instances ---
+timecode_filter filter_l (
+    .clk(clk),
+    .rst(rst),
+    .x_in(adc_data_l),
+    .x_valid(adc_data_valid),
+    .y_out(filtered_data_l)
+);
+
+timecode_filter filter_r (
+    .clk(clk),
+    .rst(rst),
+    .x_in(adc_data_r),
+    .x_valid(adc_data_valid),
+    .y_out(filtered_data_r)
+);
+
+
+// --- 3. Diagnostic Logic (Heartbeat & VU Meter) ---
+logic [26:0] heartbeat_cnt;
+always_ff @(posedge clk) begin
+    if (rst) heartbeat_cnt <= 0;
+    else     heartbeat_cnt <= heartbeat_cnt + 1;
+end
+
+assign led[15]   = heartbeat_cnt[26]; // Heartbeat blinker (~0.7Hz)
+assign led[7:0]  = filtered_data_l[15:8];  // Filtered Left Channel (MSBs)
+assign led[14:8] = filtered_data_r[15:9];  // Filtered Right Channel (MSBs)
+
 
 endmodule
