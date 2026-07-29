@@ -54,6 +54,7 @@ set sv_files {
     ../rtl/ds_dac.sv
     ../rtl/timecode_filter.sv
     ../rtl/timecode_speed_detector.sv
+    ../rtl/timecode_direction_detector.sv
 }
 
 # Specify Verilog design files location         -- EDIT

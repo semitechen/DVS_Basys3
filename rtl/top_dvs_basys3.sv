@@ -38,15 +38,15 @@ logic        adc_data_valid;
 logic [15:0] filtered_data_l;
 logic [15:0] filtered_data_r;
 
+logic [31:0] tc_period;
+logic        tc_period_valid;
+logic        tc_direction;
+
 
 // --- Constant Assignments ---
 assign sd_cs   = 1'b1; 
 assign sd_mosi = 1'b0;
 assign sd_sck  = 1'b0;
-
-
-logic [31:0] tc_period;
-logic        tc_period_valid;
 
 
 // --- 1. XADC Interface Instance ---
@@ -89,9 +89,18 @@ timecode_speed_detector speed_det (
     .period_valid(tc_period_valid)
 );
 
+// --- 4. Direction Detection ---
+timecode_direction_detector dir_det (
+    .clk(clk),
+    .rst(rst),
+    .signal_l(filtered_data_l),
+    .signal_r(filtered_data_r),
+    .signal_valid(adc_data_valid),
+    .direction(tc_direction)
+);
 
-// --- 4. Diagnostic Logic (Heartbeat & VU Meter) ---
 
+// --- 5. Diagnostic Logic (Heartbeat & VU Meter) ---
 logic [26:0] heartbeat_cnt;
 always_ff @(posedge clk) begin
     if (rst) heartbeat_cnt <= 0;
@@ -99,6 +108,8 @@ always_ff @(posedge clk) begin
 end
 
 assign led[15]   = heartbeat_cnt[26]; // Heartbeat blinker (~0.7Hz)
-assign led[14:0] = tc_period[20:6];   // Show portion of the period (speed)
+assign led[14]   = tc_direction;      // Direction indicator (1=Fwd, 0=Bwd)
+assign led[13:0] = tc_period[19:6];   // Show portion of the period (speed)
+
 
 endmodule

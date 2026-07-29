@@ -286,3 +286,34 @@ Connect the Basys3 board to your external filter circuit using the **Pmod JA** h
 | **GND** | Pin 5 | Circuit Ground |
 
 **Note:** The output of the op-amp should be AC-coupled (using a 10µF capacitor) before connecting to a DJ mixer or line-level input to remove the DC offset.
+
+## Audio Format Conversion (MP3 / WAV to 8-bit Raw Binary)
+
+To convert audio files (such as `.mp3` or `.wav`) into a raw 8-bit PCM binary format suitable for playback at 44.1 kHz, use `ffmpeg`.
+
+### 1. Convert Audio to Unsigned 8-bit Raw PCM (0 to 255)
+```bash
+ffmpeg -i input.mp3 -ar 44100 -ac 1 -f u8 output.bin
+```
+
+### 2. Convert Audio to Signed 8-bit Raw PCM (-128 to 127)
+```bash
+ffmpeg -i input.mp3 -ar 44100 -ac 1 -f s8 output_s8.bin
+```
+
+### Command Options Explained:
+- `-i input.mp3`: Path to input audio file (MP3, WAV, FLAC, etc.)
+- `-ar 44100`: Sets the sample rate to **44.1 kHz**
+- `-ac 1`: Converts audio to **mono** (1 channel)
+- `-f u8` / `-f s8`: Specifies raw headerless 8-bit PCM output (**unsigned `u8`** or **signed `s8`**)
+
+### Playback & Verification using `ffplay`
+To test playback of the raw binary file:
+```bash
+# Play unsigned 8-bit raw binary file
+ffplay -f u8 -sample_rate 44100 -ch_layout mono output.bin
+
+# Play signed 8-bit raw binary file
+ffplay -f s8 -sample_rate 44100 -ch_layout mono output_s8.bin
+```
+
