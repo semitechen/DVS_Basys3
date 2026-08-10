@@ -4,6 +4,7 @@
 #
 # Description:
 # List of files and directories not to be tracked by git.
+# They will be removed when cleaning the project directory.
 
 # Ignorowanie plików generowanych przez środowisko Vivado
 fpga/build
@@ -36,10 +37,35 @@ dvt_build.log
 xcelium.d
 xrun.log
 
-
 results/*
-
 !results/*.bit
 !results/warning_summary.log
 
 tools/audio_in/
+
+
+#KICAD
+*.000
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*-backups
+*.kicad_prl
+*.sch-bak
+*~
+_autosave-*
+*.tmp
+*-save.pro
+*-save.kicad_pcb
+fp-info-cache
+*.lck
+*.net
+*.dsn
+*.ses
+*.xml
+*.csv
+
+#System generatared files
+.DS_Store
+
