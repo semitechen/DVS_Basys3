@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module audio_fifo #(
-    parameter DATA_WIDTH = 16, 
+    parameter DATA_WIDTH = 8, 
     parameter ADDR_WIDTH = 12  
 )(
     input  logic clk,
