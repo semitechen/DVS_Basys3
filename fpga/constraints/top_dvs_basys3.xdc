@@ -121,32 +121,19 @@ set_property PACKAGE_PIN U17 [get_ports btn_down]
 
 
 
-##Pmod Header JA
-##Sch name = JA1
-#set_property PACKAGE_PIN J1 [get_ports {JA1}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA1}]
-##Sch name = JA2
-#set_property PACKAGE_PIN L2 [get_ports {JA[1]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA[1]}]
-##Sch name = JA3
-#set_property PACKAGE_PIN J2 [get_ports {JA[2]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA[2]}]
-##Sch name = JA4
-#set_property PACKAGE_PIN G2 [get_ports {JA[3]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA[3]}]
-##Sch name = JA7
-#set_property PACKAGE_PIN H1 [get_ports {JA[4]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA[4]}]
-##Sch name = JA8
-#set_property PACKAGE_PIN K2 [get_ports {JA[5]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA[5]}]
-##Sch name = JA9
-#set_property PACKAGE_PIN H2 [get_ports {JA[6]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA[6]}]
-##Sch name = JA10
-#set_property PACKAGE_PIN G3 [get_ports {JA[7]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JA[7]}]
-
+##Pmod Header JA (8-bit R-2R DAC lower bits dac[3:0])
+##Sch name = JA7 -> dac[3]
+set_property PACKAGE_PIN H1 [get_ports {dac[3]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[3]}]
+##Sch name = JA4 -> dac[2]
+set_property PACKAGE_PIN G2 [get_ports {dac[2]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[2]}]
+##Sch name = JA9 -> dac[1]
+set_property PACKAGE_PIN H2 [get_ports {dac[1]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[1]}]
+##Sch name = JA8 -> dac[0]
+set_property PACKAGE_PIN K2 [get_ports {dac[0]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[0]}]
 
 
 ##Pmod Header JB
@@ -190,45 +177,34 @@ set_property PACKAGE_PIN N17 [get_ports sd_miso]
 ##Sch name = JC4
 set_property PACKAGE_PIN P18 [get_ports sd_sck]
     set_property IOSTANDARD LVCMOS33 [get_ports sd_sck]
-##Sch name = JC7
-#set_property PACKAGE_PIN L17 [get_ports {JC[4]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JC[4]}]
-##Sch name = JC8
-#set_property PACKAGE_PIN M19 [get_ports {JC[5]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JC[5]}]
-##Sch name = JC9
-#set_property PACKAGE_PIN P17 [get_ports {JC[6]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JC[6]}]
-##Sch name = JC10
-#set_property PACKAGE_PIN R18 [get_ports {JC[7]}]
-#	set_property IOSTANDARD LVCMOS33 [get_ports {JC[7]}]
 
 
-##Pmod Header JXADC
+##Pmod Header JXADC (8-bit R-2R DAC upper bits dac[7:4] and XADC audio in)
 ##Sch name = XA1_P
 set_property PACKAGE_PIN J3 [get_ports vauxp6]
     set_property IOSTANDARD LVCMOS33 [get_ports vauxp6]
 ##Sch name = XA2_P
 set_property PACKAGE_PIN L3 [get_ports vauxp14]
 	set_property IOSTANDARD LVCMOS33 [get_ports vauxp14]
-##Sch name = XA3_P
-#set_property PACKAGE_PIN M2 [get_ports {JXADC[2]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[2]}]
-##Sch name = XA4_P
-#set_property PACKAGE_PIN N2 [get_ports {JXADC[3]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[3]}]
+##Sch name = XA3_P -> dac[6]
+set_property PACKAGE_PIN M2 [get_ports {dac[6]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[6]}]
+##Sch name = XA4_P -> dac[4]
+set_property PACKAGE_PIN N2 [get_ports {dac[4]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[4]}]
 ##Sch name = XA1_N
 set_property PACKAGE_PIN K3 [get_ports vauxn6]
     set_property IOSTANDARD LVCMOS33 [get_ports vauxn6]
 ##Sch name = XA2_N
 set_property PACKAGE_PIN M3 [get_ports vauxn14]
 	set_property IOSTANDARD LVCMOS33 [get_ports vauxn14]
-##Sch name = XA3_N
-#set_property PACKAGE_PIN M1 [get_ports {JXADC[6]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[6]}]
-##Sch name = XA4_N
-#set_property PACKAGE_PIN N1 [get_ports {JXADC[7]}]
-	#set_property IOSTANDARD LVCMOS33 [get_ports {JXADC[7]}]
+##Sch name = XA3_N -> dac[5]
+set_property PACKAGE_PIN M1 [get_ports {dac[5]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[5]}]
+##Sch name = XA4_N -> dac[7]
+set_property PACKAGE_PIN N1 [get_ports {dac[7]}]
+	set_property IOSTANDARD LVCMOS33 [get_ports {dac[7]}]
+
 
 
 

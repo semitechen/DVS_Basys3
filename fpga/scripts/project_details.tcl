@@ -12,7 +12,7 @@
 set project_name dvs_system
 
 # Top module name                               -- EDIT
-set top_module top_vga_basys3
+set top_module top_dvs_basys3
 
 # FPGA device
 set target xc7a35tcpg236-1
@@ -23,8 +23,6 @@ set target xc7a35tcpg236-1
 # Specify .xdc files location                   -- EDIT
 set xdc_files {
     constraints/top_dvs_basys3.xdc
-    constraints/top_vga_basys3.xdc
-    constraints/clk_wiz_0.xdc
 }
 
 # Specify SystemVerilog design files location   -- EDIT
@@ -51,8 +49,16 @@ set sv_files {
     ../rtl/audio_fifo.sv
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
-    ../rtl/ds_dac.sv
+    ../rtl/r2r_dac.sv
+    ../rtl/sine_gen_440.sv
+    ../rtl/sine_scale_gen.sv
+    ../rtl/xadc_interface.sv
+    ../rtl/timecode_filter.sv
+    ../rtl/timecode_speed_detector.sv
+    ../rtl/timecode_direction_detector.sv
+
 }
+
 
 # Specify Verilog design files location         -- EDIT
 # set verilog_files {

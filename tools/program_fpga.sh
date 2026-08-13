@@ -1,14 +1,30 @@
 #!/bin/bash
 #
-# Copyright (C) 2025  AGH University of Science and Technology
-# MTM UEC2
-# Author: Piotr Kaczmarczyk
+# Load bitstream to Basys3 FPGA.
+# Uses openFPGALoader directly on macOS, or Vivado TCL on remote Linux.
+# Run from project root directory.
 #
-# Description:
-# Load a bitstream to a Xilinx FPGA using Vivado in tcl mode
-# Run from the project root directory.
 
+set -e
 
-bitstream_file=$(find results -name "*.bit")
+BITSTREAM_FILE=$(find results -name "*.bit" | head -n 1)
 
-vivado -mode tcl -source fpga/scripts/program_fpga.tcl -tclargs "${bitstream_file}"
+if [ -z "${BITSTREAM_FILE}" ]; then
+    echo "Error: No .bit bitstream file found in results/."
+    exit 1
+fi
+
+echo "Found bitstream: ${BITSTREAM_FILE}"
+
+if command -v openFPGALoader >/dev/null 2>&1; then
+    echo "Programming Basys3 FPGA via openFPGALoader..."
+    openFPGALoader -b basys3 "${BITSTREAM_FILE}"
+elif command -v vivado >/dev/null 2>&1; then
+    echo "Programming Basys3 FPGA via Vivado..."
+    vivado -mode tcl -source fpga/scripts/program_fpga.tcl -tclargs "${BITSTREAM_FILE}"
+else
+    echo "Error: Neither openFPGALoader nor Vivado found in PATH."
+    exit 1
+fi
+
+echo "FPGA programming completed successfully!"
