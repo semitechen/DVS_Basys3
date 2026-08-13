@@ -47,8 +47,9 @@ module top_dvs_basys3 (
 
     // BRAM Bridge <-> Audio FIFO
     logic        fifo_prog_empty;
+    logic        fifo_empty;       
     logic        fifo_wr_en;
-    logic [7:0]  fifo_wr_data; 
+    logic [7:0]  fifo_wr_data;
     
     // Audio FIFO <-> DAC Player 
     logic        fifo_rd_en;
@@ -102,13 +103,19 @@ module top_dvs_basys3 (
         .rd_en(fifo_rd_en),
         .rd_data(fifo_rd_data),
         .prog_empty(fifo_prog_empty), 
-        .empty(),
+        .empty(fifo_empty),        
         .full()
     );
 
     // Temporary DAC outputs
-    assign dac = 8'h00;
-    assign fifo_rd_en = 1'b0;
+    dac_player player_inst (
+        .clk(clk),
+        .rst(rst),
+        .fifo_rd_data(fifo_rd_data),
+        .fifo_empty(fifo_empty),
+        .fifo_rd_en(fifo_rd_en),
+        .dac(dac)
+    );
 
 
     
