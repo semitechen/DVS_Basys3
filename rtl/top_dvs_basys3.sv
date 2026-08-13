@@ -4,7 +4,6 @@
  * Project: DVS_Basys3 (Digital Vinyl System)
  * Description: Top-level module for the DVS system.
  *              Integrates XADC, DSP Filters, and 8-bit R-2R DAC Audio Output.
- *              Includes C Major Scale (C3 to C4, 250ms per note) Audio Test.
  */
 
 module top_dvs_basys3 (
@@ -46,10 +45,6 @@ module top_dvs_basys3 (
     logic [31:0] tc_period;
     logic        tc_period_valid;
     logic        tc_direction;
-
-    logic [15:0] scale_sine_sample;
-    logic [2:0]  current_note_idx;
-    logic [15:0] audio_dac_feed;
 
 
     // --- Constant Assignments ---
@@ -108,31 +103,19 @@ module top_dvs_basys3 (
     );
 
 
-    // --- 4. C Major Scale Audio Test Generator (C3 to C4, 250ms per note) ---
-    sine_scale_gen scale_gen_inst (
-        .clk(clk),
-        .rst(rst),
-        .sine_out(scale_sine_sample),
-        .note_idx_out(current_note_idx)
-    );
-
-    // Select C Major Scale test tone by default (or toggle via btn_up)
-    assign audio_dac_feed = btn_up ? {adc_data_l, 4'b0000} : scale_sine_sample;
-
-
-    // --- 5. 8-Bit R-2R Resistor Ladder DAC Instance ---
+    // --- 4. 8-Bit R-2R Resistor Ladder DAC Instance ---
     r2r_dac #(
         .INPUT_WIDTH(16),
         .DAC_WIDTH(8)
     ) dac_inst (
         .clk(clk),
         .rst(rst),
-        .din(audio_dac_feed),
+        .din(filtered_data_l),
         .dac_out(dac)
     );
 
 
-    // --- 6. Diagnostic Logic (Heartbeat, VU Meter & Scale Note Indicator) ---
+    // --- 5. Diagnostic Logic (Heartbeat, VU Meter & DAC Level) ---
     logic [26:0] heartbeat_cnt;
     always_ff @(posedge clk) begin
         if (rst) heartbeat_cnt <= 0;
@@ -141,8 +124,7 @@ module top_dvs_basys3 (
 
     assign led[15]   = heartbeat_cnt[26];    // Heartbeat blinker (~0.7Hz)
     assign led[14]   = tc_direction;         // Direction indicator (1=Fwd, 0=Bwd)
-    assign led[10:3] = dac;                  // Real-time 8-bit DAC output level
-    assign led[2:0]  = current_note_idx;     // Note index (0=C3, 1=D3, 2=E3, 3=F3, 4=G3, 5=A3, 6=B3, 7=C4)
+    assign led[13:8] = tc_period[11:6];   // Speed period monitor
+    assign led[7:0]  = dac;                  // Real-time 8-bit DAC output level
 
 endmodule
-

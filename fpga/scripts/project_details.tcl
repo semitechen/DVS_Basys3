@@ -50,9 +50,8 @@ set sv_files {
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
     ../rtl/r2r_dac.sv
-    ../rtl/sine_gen_440.sv
-    ../rtl/sine_scale_gen.sv
     ../rtl/xadc_interface.sv
+
     ../rtl/timecode_filter.sv
     ../rtl/timecode_speed_detector.sv
     ../rtl/timecode_direction_detector.sv
