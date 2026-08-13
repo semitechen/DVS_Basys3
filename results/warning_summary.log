@@ -1,78 +1,25 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2026-05-21 00:04:17
+Created: 2026-08-10 15:14:58
 
 ----SYNTHESIS----
-WARNING: [Vivado 12-584] No ports matched 'btn_up'. [fpga/constraints/top_dvs_basys3.xdc:113]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:113]
-WARNING: [Vivado 12-584] No ports matched 'btn_up'. [fpga/constraints/top_dvs_basys3.xdc:114]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:114]
-WARNING: [Vivado 12-584] No ports matched 'btn_down'. [fpga/constraints/top_dvs_basys3.xdc:119]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:119]
-WARNING: [Vivado 12-584] No ports matched 'btn_down'. [fpga/constraints/top_dvs_basys3.xdc:120]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:120]
-WARNING: [Vivado 12-584] No ports matched 'sd_cs'. [fpga/constraints/top_dvs_basys3.xdc:182]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:182]
-WARNING: [Vivado 12-584] No ports matched 'sd_cs'. [fpga/constraints/top_dvs_basys3.xdc:183]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:183]
-WARNING: [Vivado 12-584] No ports matched 'sd_mosi'. [fpga/constraints/top_dvs_basys3.xdc:185]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:185]
-WARNING: [Vivado 12-584] No ports matched 'sd_mosi'. [fpga/constraints/top_dvs_basys3.xdc:186]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:186]
-WARNING: [Vivado 12-584] No ports matched 'sd_miso'. [fpga/constraints/top_dvs_basys3.xdc:188]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:188]
-WARNING: [Vivado 12-584] No ports matched 'sd_miso'. [fpga/constraints/top_dvs_basys3.xdc:189]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:189]
-WARNING: [Vivado 12-584] No ports matched 'sd_sck'. [fpga/constraints/top_dvs_basys3.xdc:191]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:191]
-WARNING: [Vivado 12-584] No ports matched 'sd_sck'. [fpga/constraints/top_dvs_basys3.xdc:192]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:192]
-WARNING: [Vivado 12-584] No ports matched 'vauxp6'. [fpga/constraints/top_dvs_basys3.xdc:209]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:209]
-WARNING: [Vivado 12-584] No ports matched 'vauxp6'. [fpga/constraints/top_dvs_basys3.xdc:210]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:210]
-WARNING: [Vivado 12-584] No ports matched 'vauxn6'. [fpga/constraints/top_dvs_basys3.xdc:221]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:221]
-WARNING: [Vivado 12-584] No ports matched 'vauxn6'. [fpga/constraints/top_dvs_basys3.xdc:222]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:222]
+WARNING: [Synth 8-3917] design top_sd_test has port led[14] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[13] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[12] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[11] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[10] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[9] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[8] driven by constant 0
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
+WARNING: [Synth 8-3917] design top_sd_test has port led[14] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[13] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[12] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[11] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[10] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[9] driven by constant 0
+WARNING: [Synth 8-3917] design top_sd_test has port led[8] driven by constant 0
 
 ----IMPLEMENTATION----
-WARNING: [Vivado 12-584] No ports matched 'btn_up'. [fpga/constraints/top_dvs_basys3.xdc:113]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:113]
-WARNING: [Vivado 12-584] No ports matched 'btn_up'. [fpga/constraints/top_dvs_basys3.xdc:114]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:114]
-WARNING: [Vivado 12-584] No ports matched 'btn_down'. [fpga/constraints/top_dvs_basys3.xdc:119]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:119]
-WARNING: [Vivado 12-584] No ports matched 'btn_down'. [fpga/constraints/top_dvs_basys3.xdc:120]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:120]
-WARNING: [Vivado 12-584] No ports matched 'sd_cs'. [fpga/constraints/top_dvs_basys3.xdc:182]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:182]
-WARNING: [Vivado 12-584] No ports matched 'sd_cs'. [fpga/constraints/top_dvs_basys3.xdc:183]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:183]
-WARNING: [Vivado 12-584] No ports matched 'sd_mosi'. [fpga/constraints/top_dvs_basys3.xdc:185]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:185]
-WARNING: [Vivado 12-584] No ports matched 'sd_mosi'. [fpga/constraints/top_dvs_basys3.xdc:186]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:186]
-WARNING: [Vivado 12-584] No ports matched 'sd_miso'. [fpga/constraints/top_dvs_basys3.xdc:188]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:188]
-WARNING: [Vivado 12-584] No ports matched 'sd_miso'. [fpga/constraints/top_dvs_basys3.xdc:189]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:189]
-WARNING: [Vivado 12-584] No ports matched 'sd_sck'. [fpga/constraints/top_dvs_basys3.xdc:191]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:191]
-WARNING: [Vivado 12-584] No ports matched 'sd_sck'. [fpga/constraints/top_dvs_basys3.xdc:192]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:192]
-WARNING: [Vivado 12-584] No ports matched 'vauxp6'. [fpga/constraints/top_dvs_basys3.xdc:209]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:209]
-WARNING: [Vivado 12-584] No ports matched 'vauxp6'. [fpga/constraints/top_dvs_basys3.xdc:210]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:210]
-WARNING: [Vivado 12-584] No ports matched 'vauxn6'. [fpga/constraints/top_dvs_basys3.xdc:221]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:221]
-WARNING: [Vivado 12-584] No ports matched 'vauxn6'. [fpga/constraints/top_dvs_basys3.xdc:222]
-CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:222]
-ERROR: [Place 30-58] IO placement is infeasible. Number of unplaced IO Ports (37) is greater than number of available sites (32).
-ERROR: [Place 30-374] IO placer failed to find a solution
-ERROR: [Place 30-99] Placer failed with error: 'IO Clock Placer failed'
-Please review all ERROR, CRITICAL WARNING, and WARNING messages during placement to understand the cause for failure.
-ERROR: [Common 17-69] Command failed: Placer could not place all instances
+WARNING: [Place 46-29] place_design is not in timing mode. Skip physical synthesis in placer
+WARNING: [Power 33-232] No user defined clocks were found in the design! Power estimation will be inaccurate until this is corrected.
+WARNING: [Timing 38-313] There are no user specified timing constraints. Timing constraints are needed for proper timing analysis.

@@ -12,7 +12,7 @@ module sd_card_controller_tb();
     logic        out_valid;
     
     // Sygnaly SPI
-    logic        sd_cs;
+    logic        sd_cs; 
     logic        sd_sck;
     logic        sd_mosi;
     logic        sd_miso;
