@@ -2,9 +2,9 @@
 /**
  * Module: top_dvs_basys3
  * Project: DVS_Basys3 (Digital Vinyl System)
- * Description: Top-level module for DVS system.
- *              Instantiates XADC interface and Timecode Position Tracker.
- *              Drives 16 LEDs in sync (1 step / 250 ms @ 33 1/3 RPM).
+ * Description: Production Top-Level Module for DVS Relative Mode Engine.
+ *              Integrates XADC digitization and Quadrature Timecode Position Tracker.
+ *              Outputs 32-bit Relative Sample Position @ 44.1 kHz audio sample rate.
  */
 
 module top_dvs_basys3 (
@@ -62,7 +62,7 @@ module top_dvs_basys3 (
     );
 
 
-    // --- 2. Timecode Position Tracker Instance ---
+    // --- 2. Timecode Relative Mode Position Tracker Instance ---
     timecode_pos_tracker pos_tracker (
         .clk(clk),
         .rst(rst),
@@ -75,7 +75,15 @@ module top_dvs_basys3 (
     );
 
 
-    // --- 3. Board LEDs (Position Sync Iteration) ---
-    assign led = position_leds;
+    // --- 3. System Heartbeat & LED Diagnostics ---
+    logic [26:0] heartbeat_cnt;
+    always_ff @(posedge clk) begin
+        if (rst) heartbeat_cnt <= 0;
+        else     heartbeat_cnt <= heartbeat_cnt + 1;
+    end
+
+    assign led[15]   = heartbeat_cnt[26];       // Heartbeat blinker (~0.7Hz)
+    assign led[14]   = direction_indicator;      // 1 = Forward (33 1/3 RPM), 0 = Reverse
+    assign led[13:0] = position_leds[13:0];     // Relative Mode position progress
 
 endmodule
