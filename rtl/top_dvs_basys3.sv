@@ -2,8 +2,9 @@
 /**
  * Module: top_dvs_basys3
  * Project: DVS_Basys3 (Digital Vinyl System)
- * Description: Top-level module for the DVS system.
- *              Integrates XADC for timecode signal acquisition.
+ * Description: Top-level module for DVS system.
+ *              Instantiates XADC interface and Timecode Position Tracker.
+ *              Drives 16 LEDs in sync (1 step / 250 ms @ 33 1/3 RPM).
  */
 
 module top_dvs_basys3 (
@@ -36,6 +37,10 @@ module top_dvs_basys3 (
     logic [11:0] adc_data_r;
     logic        adc_data_valid;
 
+    logic [31:0] sample_position;
+    logic        direction_indicator;
+    logic [15:0] position_leds;
+
 
     // --- Constant Assignments ---
     assign sd_cs   = 1'b1; 
@@ -57,15 +62,20 @@ module top_dvs_basys3 (
     );
 
 
-    // --- 2. Diagnostic Logic (Heartbeat & VU Meter) ---
-    logic [26:0] heartbeat_cnt;
-    always_ff @(posedge clk) begin
-        if (rst) heartbeat_cnt <= 0;
-        else     heartbeat_cnt <= heartbeat_cnt + 1;
-    end
+    // --- 2. Timecode Position Tracker Instance ---
+    timecode_pos_tracker pos_tracker (
+        .clk(clk),
+        .rst(rst),
+        .data_l(adc_data_l),
+        .data_r(adc_data_r),
+        .data_valid(adc_data_valid),
+        .sample_pos(sample_position),
+        .direction(direction_indicator),
+        .led_display(position_leds)
+    );
 
-    assign led[15]   = heartbeat_cnt[26]; // Heartbeat blinker (~0.7Hz)
-    assign led[7:0]  = adc_data_l[11:4];  // Left Channel Intensity
-    assign led[14:8] = adc_data_r[11:5];  // Right Channel Intensity
+
+    // --- 3. Board LEDs (Position Sync Iteration) ---
+    assign led = position_leds;
 
 endmodule
