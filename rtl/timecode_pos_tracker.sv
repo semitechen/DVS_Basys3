@@ -2,18 +2,26 @@
 /**
  * Module: timecode_pos_tracker
  * Project: DVS_Basys3 (Digital Vinyl System)
- * Description: Decodes Serato 1 kHz Quadrature Timecode from XADC inputs
+ * Description: Pure DVS Relative Mode Decoding Engine (4x Quadrature Resolution).
+ *              Digitizes and decodes Serato 1 kHz Quadrature Timecode from XADC inputs
  *              and tracks needle position in 44.1 kHz audio sample units.
  *
- *              Uses Schmitt-Trigger Hysteresis to reject idle noise.
- *              At standard 33 1/3 RPM (1000 Hz carrier):
- *              - 1 cycle of 1000 Hz = 44.1 audio samples.
- *              - 250 ms of playback = 11,025 audio samples.
- *              - Drives 16 LEDs sequentially (only 1 LED lit at a time, 250 ms step @ 1.0x speed).
+ * Features:
+ *  - Dynamic DC offset tracking (IIR high-pass filter) to automatically center
+ *    input signals around zero regardless of hardware analog bias.
+ *  - Fast-Attack Slow-Decay Envelope Squelch Gate to freeze tracking when audio
+ *    stops, eliminating idle drift from 50/60Hz mains hum and thermal noise.
+ *  - Dual Schmitt-Trigger Hysteresis (Left & Right) to reject noise.
+ *  - 4x Gray-Code Quadrature State Machine updating on every quarter-cycle:
+ *    * 1 cycle of 1000 Hz = 44.1 audio samples.
+ *    * 1 quadrature step = 11.025 audio samples.
+ *  - Instant direction detection for fast-paced scratching and micro-rubs.
+ *  - 32.32 fixed-point sub-sample accumulator preventing long-term drift.
  */
 
 module timecode_pos_tracker #(
-    parameter signed [12:0] HYSTERESIS = 13'sd50 // Noise immunity threshold (~40mV)
+    parameter signed [12:0] HYSTERESIS        = 13'sd80, // Noise immunity threshold (~65mV)
+    parameter logic  [15:0] SQUELCH_THRESHOLD = 16'd150  // Squelch threshold for silence/stop (~120mV)
 )(
     input  logic        clk,            // 100 MHz System Clock
     input  logic        rst,            // Reset / Zero position
@@ -22,92 +30,167 @@ module timecode_pos_tracker #(
     input  logic        data_valid,     // ADC sample strobe (~44.1 kHz - 100 kHz)
 
     output logic [31:0] sample_pos,     // Track position in 44.1 kHz audio samples
-    output logic        direction,      // 1 = Forward (33 1/3 RPM), 0 = Reverse
-    output logic [15:0] led_display     // 16 LEDs step display (only 1 LED lit at a time, 250 ms step @ 33.3 RPM)
+    output logic        direction       // 1 = Forward (33 1/3 RPM), 0 = Reverse
 );
 
-    // --- 1. DC Offset Removal (Mid-scale ~2048 for 12-bit ADC) ---
-    logic signed [12:0] ac_l, ac_r;
+    // --- 1. Dynamic DC Offset Tracking (1st-Order IIR Low-Pass DC Estimator) ---
+    // 24-bit fixed point: [23:12] integer, [11:0] fraction
+    // Alpha = 1/256 (shift by 8)
+    logic signed [23:0] dc_est_l;
+    logic signed [23:0] dc_est_r;
+    logic signed [12:0] ac_l;
+    logic signed [12:0] ac_r;
+
     always_ff @(posedge clk) begin
         if (rst) begin
-            ac_l <= 0;
-            ac_r <= 0;
+            dc_est_l <= 24'sd2048 <<< 12;
+            dc_est_r <= 24'sd2048 <<< 12;
+            ac_l     <= 13'sd0;
+            ac_r     <= 13'sd0;
         end else if (data_valid) begin
-            ac_l <= $signed({1'b0, data_l}) - 13'sd2048;
-            ac_r <= $signed({1'b0, data_r}) - 13'sd2048;
+            // Update running average DC estimate
+            dc_est_l <= dc_est_l + ((($signed({1'b0, data_l}) <<< 12) - dc_est_l) >>> 8);
+            dc_est_r <= dc_est_r + ((($signed({1'b0, data_r}) <<< 12) - dc_est_r) >>> 8);
+
+            // Compute zero-centered AC signal
+            ac_l <= $signed({1'b0, data_l}) - $signed(dc_est_l[23:12]);
+            ac_r <= $signed({1'b0, data_r}) - $signed(dc_est_r[23:12]);
         end
     end
 
-    // --- 2. Schmitt-Trigger Hysteresis Zero-Crossing Detector ---
-    logic armed;
-    logic zero_cross_pos;
+
+    // --- 2. Signal Presence & Envelope Squelch Gate (Eliminates Idle Drift) ---
+    logic [12:0] abs_l, abs_r;
+    assign abs_l = (ac_l < 0) ? -ac_l : ac_l;
+    assign abs_r = (ac_r < 0) ? -ac_r : ac_r;
+
+    logic [15:0] envelope;
+    logic signal_present;
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            armed          <= 1'b0;
-            zero_cross_pos <= 1'b0;
+            envelope       <= 16'd0;
+            signal_present <= 1'b0;
         end else if (data_valid) begin
-            if (ac_l < -HYSTERESIS) begin
-                armed          <= 1'b1; // Signal dropped below negative threshold, arm detector
-                zero_cross_pos <= 1'b0;
-            end else if (armed && (ac_l > HYSTERESIS)) begin
-                armed          <= 1'b0; // Trigger valid zero crossing
-                zero_cross_pos <= 1'b1;
+            logic [12:0] max_amp;
+            max_amp = (abs_l > abs_r) ? abs_l : abs_r;
+
+            // Fast attack, slow decay (~5 ms time constant)
+            if ({3'b0, max_amp} > envelope) begin
+                envelope <= {3'b0, max_amp};
+            end else if (envelope > 16'd0) begin
+                envelope <= envelope - (envelope >> 8) - 16'd1;
+            end
+
+            signal_present <= (envelope >= SQUELCH_THRESHOLD);
+        end
+    end
+
+
+    // --- 3. Dual Schmitt-Trigger & 4x Quadrature State Machine ---
+    logic state_a, state_b;
+    logic next_a, next_b;
+
+    // Combinatorial Schmitt trigger logic with hysteresis
+    always_comb begin
+        next_a = state_a;
+        if (ac_l > HYSTERESIS)
+            next_a = 1'b1;
+        else if (ac_l < -HYSTERESIS)
+            next_a = 1'b0;
+
+        next_b = state_b;
+        if (ac_r > HYSTERESIS)
+            next_b = 1'b1;
+        else if (ac_r < -HYSTERESIS)
+            next_b = 1'b0;
+    end
+
+    logic [1:0] curr_quad;
+    logic [1:0] next_quad;
+    assign curr_quad = {state_a, state_b};
+    assign next_quad = {next_a, next_b};
+
+    logic fwd_step;
+    logic rev_step;
+    logic dir_reg;
+
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            state_a   <= 1'b0;
+            state_b   <= 1'b0;
+            fwd_step  <= 1'b0;
+            rev_step  <= 1'b0;
+            dir_reg   <= 1'b1;
+        end else if (data_valid) begin
+            state_a <= next_a;
+            state_b <= next_b;
+
+            if (signal_present) begin
+                case ({curr_quad, next_quad})
+                    // Forward transitions: (0,0) -> (0,1) -> (1,1) -> (1,0) -> (0,0)
+                    4'b00_01,
+                    4'b01_11,
+                    4'b11_10,
+                    4'b10_00: begin
+                        fwd_step <= 1'b1;
+                        rev_step <= 1'b0;
+                        dir_reg  <= 1'b1;
+                    end
+
+                    // Reverse transitions: (0,0) -> (1,0) -> (1,1) -> (0,1) -> (0,0)
+                    4'b00_10,
+                    4'b10_11,
+                    4'b11_01,
+                    4'b01_00: begin
+                        fwd_step <= 1'b0;
+                        rev_step <= 1'b1;
+                        dir_reg  <= 1'b0;
+                    end
+
+                    // Stationary or invalid diagonal jumps (noise reject)
+                    default: begin
+                        fwd_step <= 1'b0;
+                        rev_step <= 1'b0;
+                    end
+                endcase
             end else begin
-                zero_cross_pos <= 1'b0;
+                fwd_step <= 1'b0;
+                rev_step <= 1'b0;
             end
         end else begin
-            zero_cross_pos <= 1'b0;
+            fwd_step <= 1'b0;
+            rev_step <= 1'b0;
         end
     end
 
-    // Quadrature Direction: at Left positive zero-crossing, if Right > 0 => Forward, else Reverse
-    logic fwd_dir;
-    always_ff @(posedge clk) begin
-        if (rst) begin
-            fwd_dir <= 1'b1;
-        end else if (zero_cross_pos) begin
-            fwd_dir <= (ac_r > 0);
-        end
-    end
-    assign direction = fwd_dir;
+    assign direction = dir_reg;
 
 
-    // --- 3. Fractional Sample Position Accumulator ---
+    // --- 4. High-Precision Fractional Sample Position Accumulator (32.32 Fixed-Point) ---
     // 1 cycle of 1000 Hz timecode @ 44.1 kHz Fs = 44.1 samples
-    // Represented in 16.16 fixed-point: 44.1 * 65536 = 2890137 (32'h002C1999)
-    localparam logic [31:0] SAMPLES_PER_CYCLE_FP = 32'd2890137;
+    // 1 quadrature step (1/4 cycle) = 11.025 samples
+    // 11.025 in 32.32 fixed-point = 11 * 2^32 + 0.025 * 2^32 = 47351658496 (64'h0000_000B_0666_6666)
+    localparam logic [63:0] SAMPLES_PER_STEP_FP = 64'h0000_000B_0666_6666;
 
-    logic [47:0] pos_fp; // 32-bit integer . 16-bit fraction
+    logic [63:0] pos_fp; // 32-bit integer . 32-bit fraction
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            pos_fp <= 48'd0;
-        end else if (zero_cross_pos) begin
-            if (fwd_dir) begin
-                pos_fp <= pos_fp + SAMPLES_PER_CYCLE_FP;
-            end else begin
-                if (pos_fp >= SAMPLES_PER_CYCLE_FP)
-                    pos_fp <= pos_fp - SAMPLES_PER_CYCLE_FP;
+            pos_fp <= 64'd0;
+        end else begin
+            if (fwd_step) begin
+                pos_fp <= pos_fp + SAMPLES_PER_STEP_FP;
+            end else if (rev_step) begin
+                if (pos_fp >= SAMPLES_PER_STEP_FP)
+                    pos_fp <= pos_fp - SAMPLES_PER_STEP_FP;
                 else
-                    pos_fp <= 48'd0;
+                    pos_fp <= 64'd0;
             end
         end
     end
 
     // Integer part of current sample position
-    assign sample_pos = pos_fp[47:16];
-
-
-    // --- 4. Sequential LED Step Display (Only 1 LED lit at a time, 250 ms step @ 33 1/3 RPM) ---
-    // 250 ms @ 44.1 kHz = 11,025 samples
-    // 16 LEDs step: step_index = (sample_pos / 11025) % 16
-    logic [3:0] led_index;
-    always_comb begin
-        led_index = (sample_pos / 32'd11025) % 16;
-    end
-
-    // One-hot single LED output (strictly 1 LED lit at a time)
-    assign led_display = (16'b1 << led_index);
+    assign sample_pos = pos_fp[63:32];
 
 endmodule
