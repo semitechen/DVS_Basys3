@@ -50,6 +50,7 @@ set sv_files {
     rtl/top_vga_basys3.sv
     ../rtl/xadc_interface.sv
     ../rtl/timecode_pos_tracker.sv
+    ../rtl/led_pos_display.sv
     ../rtl/top_dvs_basys3.sv
 }
 
