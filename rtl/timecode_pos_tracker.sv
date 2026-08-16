@@ -6,17 +6,12 @@
  *              Digitizes and decodes Serato 1 kHz Quadrature Timecode from XADC inputs
  *              and tracks needle position in 44.1 kHz audio sample units.
  *
- * Features:
- *  - Dynamic DC offset tracking (IIR high-pass filter) to automatically center
- *    input signals around zero regardless of hardware analog bias.
- *  - Fast-Attack Slow-Decay Envelope Squelch Gate to freeze tracking when audio
- *    stops, eliminating idle drift from 50/60Hz mains hum and thermal noise.
- *  - Dual Schmitt-Trigger Hysteresis (Left & Right) to reject noise.
- *  - 4x Gray-Code Quadrature State Machine updating on every quarter-cycle:
- *    * 1 cycle of 1000 Hz = 44.1 audio samples.
- *    * 1 quadrature step = 11.025 audio samples.
- *  - Instant direction detection for fast-paced scratching and micro-rubs.
- *  - 32.32 fixed-point sub-sample accumulator preventing long-term drift.
+ * Robust Noise Immunity & Silence Detection:
+ *  1. 32-bit Fixed-Point Dynamic DC Estimator (zero DC offset, no bit-width overflow).
+ *  2. Dual Schmitt-Trigger Hysteresis (Left & Right) with parameterizable threshold.
+ *  3. Fast-Attack / Slow-Decay Envelope Squelch Gate (silence squelch ~120mV).
+ *  4. 4x Gray-Code Quadrature State Machine (11.025 samples per quarter-cycle step).
+ *  5. 32.32 Fixed-Point Sub-Sample Position Accumulator.
  */
 
 module timecode_pos_tracker #(
@@ -33,28 +28,28 @@ module timecode_pos_tracker #(
     output logic        direction       // 1 = Forward (33 1/3 RPM), 0 = Reverse
 );
 
-    // --- 1. Dynamic DC Offset Tracking (1st-Order IIR Low-Pass DC Estimator) ---
-    // 24-bit fixed point: [23:12] integer, [11:0] fraction
+    // --- 1. 32-bit Dynamic DC Offset Tracking (1st-Order IIR Low-Pass DC Estimator) ---
+    // 32-bit signed fixed point: [31:12] integer, [11:0] fraction
     // Alpha = 1/256 (shift by 8)
-    logic signed [23:0] dc_est_l;
-    logic signed [23:0] dc_est_r;
+    logic signed [31:0] dc_est_l;
+    logic signed [31:0] dc_est_r;
     logic signed [12:0] ac_l;
     logic signed [12:0] ac_r;
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            dc_est_l <= 24'sd2048 <<< 12;
-            dc_est_r <= 24'sd2048 <<< 12;
+            dc_est_l <= 32'sd2048 <<< 12;
+            dc_est_r <= 32'sd2048 <<< 12;
             ac_l     <= 13'sd0;
             ac_r     <= 13'sd0;
         end else if (data_valid) begin
-            // Update running average DC estimate
+            // 32-bit signed differences (zero risk of overflow for 12-bit ADC data 0..4095)
             dc_est_l <= dc_est_l + ((($signed({1'b0, data_l}) <<< 12) - dc_est_l) >>> 8);
             dc_est_r <= dc_est_r + ((($signed({1'b0, data_r}) <<< 12) - dc_est_r) >>> 8);
 
             // Compute zero-centered AC signal
-            ac_l <= $signed({1'b0, data_l}) - $signed(dc_est_l[23:12]);
-            ac_r <= $signed({1'b0, data_r}) - $signed(dc_est_r[23:12]);
+            ac_l <= $signed({1'b0, data_l}) - $signed(dc_est_l[24:12]);
+            ac_r <= $signed({1'b0, data_r}) - $signed(dc_est_r[24:12]);
         end
     end
 
@@ -64,25 +59,25 @@ module timecode_pos_tracker #(
     assign abs_l = (ac_l < 0) ? -ac_l : ac_l;
     assign abs_r = (ac_r < 0) ? -ac_r : ac_r;
 
-    logic [15:0] envelope;
+    logic [23:0] envelope; // 24-bit accumulator with 10 fractional bits
     logic signal_present;
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            envelope       <= 16'd0;
+            envelope       <= 24'd0;
             signal_present <= 1'b0;
         end else if (data_valid) begin
             logic [12:0] max_amp;
             max_amp = (abs_l > abs_r) ? abs_l : abs_r;
 
             // Fast attack, slow decay (~5 ms time constant)
-            if ({3'b0, max_amp} > envelope) begin
-                envelope <= {3'b0, max_amp};
-            end else if (envelope > 16'd0) begin
-                envelope <= envelope - (envelope >> 8) - 16'd1;
+            if ({1'b0, max_amp, 10'b0} > envelope) begin
+                envelope <= {1'b0, max_amp, 10'b0};
+            end else if (envelope > 24'd0) begin
+                envelope <= envelope - (envelope >> 8) - 24'd1;
             end
 
-            signal_present <= (envelope >= SQUELCH_THRESHOLD);
+            signal_present <= (envelope[22:10] >= SQUELCH_THRESHOLD);
         end
     end
 
