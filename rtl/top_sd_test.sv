@@ -1,5 +1,9 @@
 `timescale 1ns / 1ps
 
+/*
+Author: Tomasz Jachymiak
+ */
+
 module top_sd_test (
     input  logic        clk,      // 100 MHz
     input  logic        rst,      // Przycisk srodkowy (Reset)

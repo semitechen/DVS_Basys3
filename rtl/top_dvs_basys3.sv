@@ -58,6 +58,10 @@ module top_dvs_basys3 (
     // Auto-play logic
     logic prev_sd_ready = 0;
     logic auto_play_req;
+
+    // Debouncing module
+    logic btn_up_pulse;
+    logic btn_down_pulse;
     
     always_ff @(posedge clk) begin
         if (rst) prev_sd_ready <= 0;
@@ -117,6 +121,25 @@ module top_dvs_basys3 (
         .dac(dac)
     );
 
+    button_debouncer #(
+    .CYCLES(1_000_000)
+    ) deb_up (
+    .clk(clk),
+    .rst(rst),
+    .btn_in(btn_up),
+    .btn_out_state(),          // Zostawiamy puste, jeśli nie potrzebujemy poziomu
+    .btn_out_pulse(btn_up_pulse) // Pobieramy tylko czysty impuls
+    );
+    
+    button_debouncer #(
+    .CYCLES(1_000_000)
+) deb_down (
+    .clk(clk),
+    .rst(rst),
+    .btn_in(btn_down),
+    .btn_out_state(),              
+    .btn_out_pulse(btn_down_pulse)
+);
 
     
     // -Internal Signals (DVS Timecode from Main Branch)

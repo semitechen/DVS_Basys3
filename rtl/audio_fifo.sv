@@ -1,5 +1,9 @@
 `timescale 1ns / 1ps
 
+/*
+Author: Tomasz Jachymiak
+ */
+
 module audio_fifo #(
     parameter DATA_WIDTH = 8, 
     parameter ADDR_WIDTH = 12  

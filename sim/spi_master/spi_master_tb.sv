@@ -1,5 +1,9 @@
 `timescale 1ns / 1ps
 
+/*
+Author: Tomasz Jachymiak
+ */
+
 module spi_master_tb();
 
     // Sygnaly testowe
