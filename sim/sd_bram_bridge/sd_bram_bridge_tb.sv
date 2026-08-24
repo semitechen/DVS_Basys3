@@ -1,5 +1,9 @@
 `timescale 1ns / 1ps
 
+/*
+Author: Tomasz Jachymiak
+ */
+
 module sd_bram_bridge_tb();
 
     logic clk;

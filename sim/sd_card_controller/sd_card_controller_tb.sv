@@ -1,5 +1,9 @@
 `timescale 1ns / 1ps
 
+/*
+Author: Tomasz Jachymiak
+ */
+
 module sd_card_controller_tb();
 
     // Sygnaly systemowe

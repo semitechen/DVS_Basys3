@@ -35,6 +35,7 @@ set sv_files {
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
     ../rtl/dac_player.sv
+    ../rtl/button_debouncer.sv
     
     ../rtl/xadc_interface.sv
     ../rtl/ds_dac.sv
