@@ -225,6 +225,18 @@ module top_dvs_basys3 (
 
     assign led[15]   = heartbeat_cnt[26]; // Heartbeat blinker (~0.7Hz)
     assign led[14]   = tc_direction;      // Direction indicator (1=Fwd, 0=Bwd)
-    assign led[13:0] = tc_period[19:6];   // Show portion of the period (speed)
+    assign led[13] = tc_direction;    // Kierunek (1=Fwd, 0=Bwd)
+    assign led[12] = 1'b0;            // Pusta dioda (separator wizualny)
+    
+    // [11:10] SD Card Status (Issue #20)
+    assign led[11] = sd_ready;        // Karta SD zainicjowana pomyślnie (musi świecić!)
+    assign led[10] = sd_rd_req;       // Odczyt w toku (będzie szybko migać/żarzyć się)
+    
+    // [9:8] Audio Buffer Warnings (Issue #20)
+    assign led[9]  = fifo_prog_empty; // Ostrzeżenie: mało danych w buforze
+    assign led[8]  = fifo_empty;      // BŁĄD: Buffer Under-run (dane nie nadążają za DAC)
+    
+    // [7:0] DVS Speed (podgląd starszych bitów z tc_period)
+    assign led[7:0] = tc_period[21:14];
 
 endmodule
