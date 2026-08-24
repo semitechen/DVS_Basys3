@@ -1,0 +1,2 @@
+sv work ../../rtl/button_debouncer.sv
+sv work button_debouncer_tb.sv
