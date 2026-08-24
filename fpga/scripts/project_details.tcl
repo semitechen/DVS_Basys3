@@ -29,6 +29,7 @@ set xdc_files {
 set sv_files {
     ../rtl/top_sd_test.sv
     ../rtl/top_dvs_basys3.sv
+    ../rtl/track_selector.sv
     ../rtl/track_lut.sv
     ../rtl/spi_master.sv
     ../rtl/audio_fifo.sv

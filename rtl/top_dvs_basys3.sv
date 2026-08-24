@@ -63,12 +63,9 @@ module top_dvs_basys3 (
     logic btn_up_pulse;
     logic btn_down_pulse;
     
-    always_ff @(posedge clk) begin
-        if (rst) prev_sd_ready <= 0;
-        else     prev_sd_ready <= sd_ready;
-    end
+    logic [31:0] current_track_addr;
+    logic        track_play_req;
     
-    assign auto_play_req = (sd_ready && !prev_sd_ready);
 
     sd_card_controller sd_ctrl_inst (
         .clk(clk),
@@ -87,8 +84,8 @@ module top_dvs_basys3 (
     sd_bram_bridge bridge_inst (
         .clk(clk),
         .rst(rst),
-        .play_req(auto_play_req),
-        .start_addr(32'd0), 
+        .play_req(track_play_req),
+        .start_addr(current_track_addr), 
         .sd_ready(sd_ready),
         .out_byte(sd_out_byte),
         .out_valid(sd_out_valid),
@@ -133,13 +130,25 @@ module top_dvs_basys3 (
     
     button_debouncer #(
     .CYCLES(1_000_000)
-) deb_down (
+    )   deb_down (
     .clk(clk),
     .rst(rst),
     .btn_in(btn_down),
     .btn_out_state(),              
     .btn_out_pulse(btn_down_pulse)
-);
+    );
+
+// --- Moduł wyboru utworów (Issue #19) ---
+    track_selector #(
+            .MAX_TRACKS(4)
+    ) track_sel_inst (
+        .clk(clk),
+        .rst(rst),
+        .btn_up_pulse(btn_up_pulse),       // Z debouncera UP
+        .btn_down_pulse(btn_down_pulse),   // Z debouncera DOWN
+        .start_addr(current_track_addr),   // Wyjście: Adres dla karty
+        .play_req(track_play_req)          // Wyjście: Impuls startu
+    );
 
     
     // -Internal Signals (DVS Timecode from Main Branch)

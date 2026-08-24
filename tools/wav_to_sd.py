@@ -1,33 +1,31 @@
 import wave
 import os
 import struct
+import array
 
-
-INPUT_DIR = "tools/audio_in"         # Folder na pliki 
-OUTPUT_IMG = "results/sd_card.img"     # Gotowy plik do wgrania na karte
-LUT_FILE = "rtl/track_lut.sv"      # Sprzetowa tablica adresow
-SECTOR_SIZE = 512              # Rozmiar sektora karty SD
+INPUT_DIR = "tools/audio_in"           
+OUTPUT_IMG = "results/sd_card.img"     
+LUT_FILE = "rtl/track_lut.sv"      
+SECTOR_SIZE = 512              
 
 def process_audio():
-    # Sprawdzenie czy istnieje folder wejsciowy
     if not os.path.exists(INPUT_DIR):
         os.makedirs(INPUT_DIR)
         print(f"Utworzono folder '{INPUT_DIR}'.")
-        print("Wrzuć tam pliki muzyczne (.wav) i uruchom skrypt ponownie.")
+        print("Wrzuc tam pliki muzyczne (.wav) i uruchom skrypt ponownie.")
         return
 
-    # Pobranie listy plików
     wav_files = [f for f in os.listdir(INPUT_DIR) if f.lower().endswith('.wav')]
     if not wav_files:
-        print(f"Brak plików .wav w folderze '{INPUT_DIR}'.")
+        print(f"Brak plikow .wav w folderze '{INPUT_DIR}'.")
         return
 
-    wav_files.sort() # Sortujemy alfabetycznie, żeby utwory miały stałe numery
+    wav_files.sort() 
     
     lut_entries = []
-    current_lba_sector = 0 # Adres startowy na karcie (0 to sam początek)
+    current_lba_sector = 0 
 
-    print("Rozpoczynam konwersję audio...")
+    print("Rozpoczynam konwersje audio (16-bit -> 8-bit unsigned)...")
 
     with open(OUTPUT_IMG, 'wb') as f_out:
         for track_idx, filename in enumerate(wav_files):
@@ -35,32 +33,39 @@ def process_audio():
             
             with wave.open(filepath, 'rb') as wav:
                 if wav.getsampwidth() != 2:
-                    print(f"BŁĄD: Plik {filename} nie jest 16-bitowy! Zostaje pominętyi.")
+                    print(f"BLAD: Plik {filename} nie jest 16-bitowy! Skrypt wymaga 16-bitowych plikow.")
                     continue
                 
-                # Zczytanie samych surowych próbek (bez nagłówka RIFF)
+                channels = wav.getnchannels()
                 frames = wav.readframes(wav.getnframes())
+                samples_16bit = array.array('h', frames)
                 
-                f_out.write(frames)
+                # Inżynierska poprawka: Konwersja Stereo do Mono w locie
+                if channels == 2:
+                    print(f"[{track_idx}] Konwersja Stereo -> Mono dla pliku {filename}")
+                    mono_samples = samples_16bit[0::2] # Pobieramy co drugą próbkę (tylko lewy kanał)
+                else:
+                    mono_samples = samples_16bit
                 
-                # Karty SD czytają pełne bloki 512-bajtowe. 
-                # Dopelnienie koncowki pliku zerami, żeby kolejny utwór zaczął się równo od nowego sektora.
-                bytes_written = len(frames)
+                # Obcięcie do 8 bitów i zmiana na wartości bez znaku (+128)
+                samples_8bit = bytearray((s >> 8) + 128 for s in mono_samples)
+                
+                f_out.write(samples_8bit)
+                
+                bytes_written = len(samples_8bit)
                 padding = (SECTOR_SIZE - (bytes_written % SECTOR_SIZE)) % SECTOR_SIZE
                 if padding != 0:
-                    f_out.write(b'\x00' * padding)
+                    # Poprawka sprzętowa: padding ciszą analogową (1.65V), nie zerami (0V)
+                    f_out.write(b'\x80' * padding)
                 
-                # Zapisanie informacji do wygenerowania kodu SV
                 lut_entries.append((track_idx, current_lba_sector, filename))
                 
-                # Zaktualizowanie licznika o ilość wykorzystanych sektorów
                 sectors_used = (bytes_written + padding) // SECTOR_SIZE
                 current_lba_sector += sectors_used
                 
-                print(f"[{track_idx}] {filename} -> Adres (LBA): {lut_entries[-1][1]}, Rozmiar: {sectors_used} sektorów.")
+                print(f"[{track_idx}] {filename} -> Adres (LBA): {lut_entries[-1][1]}, Rozmiar: {sectors_used} sektorow.")
 
-    # GENEROWANIE KODU SYSTEMVERILOG
-    print("\nGenerowanie modułu SystemVerilog (Track LUT)...")
+    print("\nGenerowanie modulu SystemVerilog (Track LUT)...")
     with open(LUT_FILE, 'w') as f_sv:
         f_sv.write("// AUTOMATYCZNIE WYGENEROWANY PLIK - NIE EDYTUJ RECZNIE\n")
         f_sv.write("// Skrypt wav_to_sd.py\n\n")
@@ -73,7 +78,6 @@ def process_audio():
         f_sv.write("        case (track_id)\n")
         
         for entry in lut_entries:
-            # Wpisanie twardych adresow LBA dla konkretnych numerów utworów
             f_sv.write(f"            8'd{entry[0]}: start_lba = 32'd{entry[1]}; // Plik: {entry[2]}\n")
             
         f_sv.write("            default: start_lba = 32'd0;\n")
@@ -81,8 +85,8 @@ def process_audio():
         f_sv.write("    end\n")
         f_sv.write("endmodule\n")
         
-    print(f"\nSukces! Gotowy obraz do wgrania: {OUTPUT_IMG}")
-    print(f"Moduł do wrzucenia w Vivado: {LUT_FILE}")
+    print(f"\nSukces! Gotowy obraz 8-bitowy do wgrania na karte: {OUTPUT_IMG}")
+    print(f"Zaktualizowano modul z adresami: {LUT_FILE}")
 
 if __name__ == "__main__":
     process_audio()
