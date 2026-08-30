@@ -3,16 +3,15 @@
 # Author: Piotr Kaczmarczyk
 #
 # Description:
-# Project detiles required for generate_bitstream.tcl
-# Make sure that project_name, top_module and target are correct.
-# sv_files and vhdl_files should contain all files required for synthesis.
+# Project details required for generate_bitstream.tcl
+# Konfiguracja dla Płytki B (Odtwarzacz Audio)
 
 #-----------------------------------------------------#
 # Project name                                  -- EDIT
-set project_name dvs_system
+set project_name dvs_board_b_player
 
 # Top module name                               -- EDIT
-set top_module top_dvs_basys3
+set top_module top_board_b_player
 
 # FPGA device
 set target xc7a35tcpg236-1
@@ -27,27 +26,22 @@ set xdc_files {
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
-    ../rtl/top_sd_test.sv
-    ../rtl/top_dvs_basys3.sv
+    ../rtl/top_board_b_player.sv
     ../rtl/track_selector.sv
     ../rtl/track_lut.sv
     ../rtl/spi_master.sv
     ../rtl/audio_fifo.sv
     ../rtl/sd_card_controller.sv
     ../rtl/sd_bram_bridge.sv
-    ../rtl/dac_player.sv
+    ../rtl/variable_speed_player.sv
     ../rtl/button_debouncer.sv
     
-    ../rtl/xadc_interface.sv
-    ../rtl/ds_dac.sv
-    ../rtl/timecode_filter.sv
-    ../rtl/timecode_speed_detector.sv
-    ../rtl/timecode_direction_detector.sv
+    ../rtl/dvs_uart_receiver.sv
+    ../rtl/uart_rx.sv
 }
 
 # Specify Verilog design files location         -- EDIT
 # set verilog_files {
-#     path/to/file.v
 # }
 
 # Specify VHDL design files location            -- EDIT

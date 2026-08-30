@@ -1,121 +1,111 @@
 `timescale 1ns / 1ps
 
 /*
-Author: Tomasz Jachymiak
+ * Author: Tomasz Jachymiak 
  */
 
 module sd_bram_bridge (
     input  logic        clk,
     input  logic        rst,
+    
+    // Sygnały sterujące z selektora / UART
+    input  logic        play_req,
+    input  logic [31:0] start_addr,
+    input  logic        direction,     // 1 = do przodu, 0 = do tyłu
 
-    // Interfejs Sterowania 
-    input  logic        play_req,    // Impuls: zacznij odtwarzac nowy utwor
-    input  logic [31:0] start_addr,  // Adres poczatkowy LBA z modulu track_lut
-
-    // Interfejs z SD Card Controller
-    output logic        rd_req,
-    output logic [31:0] rd_addr,
+    // Interfejs do kontrolera karty SD
     input  logic        sd_ready,
     input  logic [7:0]  out_byte,
     input  logic        out_valid,
+    output logic        rd_req,
+    output logic [31:0] rd_addr,
 
-    // Interfejs z Audio FIFO
-    input  logic        prog_empty,
+    // Interfejs do Audio FIFO
+    input  logic        prog_full,      
     output logic        wr_en,
-    output logic [7:0]  wr_data      // ZMIANA: Szyna 8-bitowa
+    output logic [7:0]  wr_data
 );
 
-    typedef enum logic {
-        ST_IDLE,
-        ST_FETCH_BLOCK
+    // Wewnętrzny bufor na jeden sektor (512 bajtów)
+    logic [7:0] sector_buffer [0:511];
+    logic [9:0] byte_cnt;
+
+    typedef enum logic [2:0] {
+        IDLE, WAIT_SD, READ_SECTOR, WAIT_FIFO, PUSH_FIFO, NEXT_SECTOR
     } state_t;
-
-    state_t state, state_nxt;
-
-    // Rejestry wewnetrzne
-    logic        playing, playing_nxt;
-    logic [31:0] current_sector, current_sector_nxt;
-    logic [8:0]  byte_cnt, byte_cnt_nxt;    // Liczy od 0 do 511
-
-    // Rejestry wyjsciowe
-    logic        rd_req_reg, rd_req_nxt;
-    logic [31:0] rd_addr_reg, rd_addr_nxt;
-    logic        wr_en_reg, wr_en_nxt;
-    logic [7:0]  wr_data_reg, wr_data_nxt;  // ZMIANA: 8-bitowy rejestr
-
-    assign rd_req  = rd_req_reg;
-    assign rd_addr = rd_addr_reg;
-    assign wr_en   = wr_en_reg;
-    assign wr_data = wr_data_reg;
-
-    always_comb begin
-        state_nxt          = state;
-        playing_nxt        = playing;
-        current_sector_nxt = current_sector;
-        byte_cnt_nxt       = byte_cnt;
-        
-        rd_addr_nxt        = rd_addr_reg;
-        wr_data_nxt        = wr_data_reg;
-        
-        // Sygnaly impulsowe domyslnie w zerze
-        rd_req_nxt         = 1'b0; 
-        wr_en_nxt          = 1'b0;
-
-        if (play_req) begin
-            playing_nxt        = 1'b1;
-            current_sector_nxt = start_addr;
-            state_nxt          = ST_IDLE; 
-        end
-
-        case (state)
-            ST_IDLE: begin
-                if (playing && prog_empty && sd_ready) begin
-                    rd_req_nxt  = 1'b1;
-                    rd_addr_nxt = current_sector;
-                    
-                    current_sector_nxt = current_sector + 1; 
-                    byte_cnt_nxt       = '0;
-                    state_nxt          = ST_FETCH_BLOCK;
-                end
-            end
-
-            ST_FETCH_BLOCK: begin
-                if (out_valid) begin
-                    byte_cnt_nxt = byte_cnt + 1;
-                    
-                    // Bezposredni zapis 8-bitowej probki do FIFO
-                    wr_data_nxt  = out_byte; 
-                    wr_en_nxt    = 1'b1;     
-
-                    if (byte_cnt == 511) begin
-                        state_nxt = ST_IDLE;
-                    end
-                end
-            end
-        endcase
-    end
+    state_t state;
 
     always_ff @(posedge clk) begin
         if (rst) begin
-            state <= ST_IDLE;
-            playing <= 1'b0;
-            current_sector <= '0;
-            byte_cnt <= '0;
-            
-            rd_req_reg <= 1'b0;
-            rd_addr_reg <= '0;
-            wr_en_reg <= 1'b0;
-            wr_data_reg <= '0;
+            state    <= IDLE;
+            rd_req   <= 0;
+            wr_en    <= 0;
+            rd_addr  <= 0;
+            byte_cnt <= 0;
         end else begin
-            state <= state_nxt;
-            playing <= playing_nxt;
-            current_sector <= current_sector_nxt;
-            byte_cnt <= byte_cnt_nxt;
+            rd_req <= 0; // Domyślnie brak żądania do karty SD
+            wr_en  <= 0; // Domyślnie brak zapisu do FIFO
             
-            rd_req_reg <= rd_req_nxt;
-            rd_addr_reg <= rd_addr_nxt;
-            wr_en_reg <= wr_en_nxt;
-            wr_data_reg <= wr_data_nxt;
+            case (state)
+                IDLE: begin
+                    if (play_req && sd_ready) begin
+                        rd_addr <= start_addr;
+                        state   <= WAIT_SD;
+                    end
+                end
+
+                WAIT_SD: begin
+                    if (!prog_full) begin // Czytaj tylko, jeśli FIFO ma miejsce
+                        rd_req <= 1;
+                        state  <= READ_SECTOR;
+                        byte_cnt <= 0;
+                    end
+                end
+
+                READ_SECTOR: begin
+                    if (out_valid) begin
+                        sector_buffer[byte_cnt] <= out_byte;
+                        byte_cnt <= byte_cnt + 1;
+                        if (byte_cnt == 511) begin
+                            state <= WAIT_FIFO;
+                            // Przygotowanie licznika do zrzutu (zależnie od kierunku)
+                            byte_cnt <= direction ? 10'd0 : 10'd511; 
+                        end
+                    end
+                end
+
+                WAIT_FIFO: begin
+                    // Czekamy jeden cykl na ustabilizowanie się pamięci RAM
+                    state <= PUSH_FIFO;
+                end
+
+                PUSH_FIFO: begin
+                    wr_en   <= 1;
+                    wr_data <= sector_buffer[byte_cnt];
+                    
+                    if (direction == 1'b1) begin
+                        // Do przodu
+                        if (byte_cnt == 511) state <= NEXT_SECTOR;
+                        else                 byte_cnt <= byte_cnt + 1;
+                    end else begin
+                        // Do tyłu
+                        if (byte_cnt == 0) state <= NEXT_SECTOR;
+                        else               byte_cnt <= byte_cnt - 1;
+                    end
+                end
+
+                NEXT_SECTOR: begin
+                    // Zmiana adresu z zachowaniem bezpiecznika (nie czytamy przed sektorem 0)
+                    if (direction == 1'b1) begin
+                        rd_addr <= rd_addr + 1;
+                    end else begin
+                        if (rd_addr > 0) rd_addr <= rd_addr - 1;
+                    end
+                    state <= WAIT_SD;
+                end
+                
+                default: state <= IDLE;
+            endcase
         end
     end
 
