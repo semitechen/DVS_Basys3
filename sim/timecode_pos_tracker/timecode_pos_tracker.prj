@@ -1,0 +1,3 @@
+sv work ../../rtl/timecode_pos_tracker.sv
+sv work ../../rtl/led_pos_display.sv
+sv work timecode_pos_tracker_tb.sv

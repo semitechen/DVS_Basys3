@@ -4,14 +4,15 @@
 #
 # Description:
 # Project details required for generate_bitstream.tcl
-# Konfiguracja dla Płytki B (Odtwarzacz Audio)
+# Integrated DVS System (XADC Timecode + SD Audio Player + 16x DAC)
 
 #-----------------------------------------------------#
 # Project name                                  -- EDIT
-set project_name dvs_board_b_player
+set project_name dvs_basys3_integrated
+
 
 # Top module name                               -- EDIT
-set top_module top_board_b_player
+set top_module top_dvs_basys3
 
 # FPGA device
 set target xc7a35tcpg236-1
@@ -26,7 +27,11 @@ set xdc_files {
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
-    ../rtl/top_board_b_player.sv
+    ../rtl/top_dvs_basys3.sv
+    ../rtl/xadc_interface.sv
+    ../rtl/timecode_pos_tracker.sv
+    ../rtl/led_pos_display.sv
+    
     ../rtl/r2r_dac.sv
     ../rtl/track_selector.sv
     ../rtl/track_lut.sv
@@ -46,10 +51,12 @@ set sv_files {
 # }
 
 # Specify VHDL design files location            -- EDIT
-#set vhdl_files {
-#}
+set vhdl_files {
+    ../rtl/Ps2Interface.vhd
+    ../rtl/MouseCtl.vhd
+    ../rtl/MouseDisplay.vhd
+}
 
 # Specify files for a memory initialization     -- EDIT
- #set mem_files {
- # 
- #}
+# set mem_files {
+# }

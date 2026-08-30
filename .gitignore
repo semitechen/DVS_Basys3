@@ -43,7 +43,6 @@ results/*
 
 tools/audio_in/
 
-
 #KICAD
 *.000
 *.bak
@@ -66,6 +65,5 @@ fp-info-cache
 *.xml
 *.csv
 
-#System generatared files
+#System generated files
 .DS_Store
-

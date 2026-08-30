@@ -1,5 +1,6 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
+<<<<<<< HEAD
 Created: 2026-08-30 19:26:56
 
 ----SYNTHESIS----
@@ -15,3 +16,115 @@ WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 WARNING: [DRC DPIP-1] Input pipelining: DSP v_player/phase_accumulator2 input v_player/phase_accumulator2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
 WARNING: [DRC DPOP-1] PREG Output pipelining: DSP v_player/phase_accumulator2 output v_player/phase_accumulator2/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
 WARNING: [DRC DPOP-2] MREG Output pipelining: DSP v_player/phase_accumulator2 multiplier stage v_player/phase_accumulator2/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+=======
+Created: 2026-08-16 12:13:08
+
+----SYNTHESIS----
+WARNING: [Synth 8-7071] port 'JTAGBUSY' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
+WARNING: [Synth 8-7071] port 'JTAGLOCKED' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
+WARNING: [Synth 8-7071] port 'JTAGMODIFIED' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
+WARNING: [Synth 8-7071] port 'OT' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
+WARNING: [Synth 8-7071] port 'CONVST' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
+WARNING: [Synth 8-7071] port 'CONVSTCLK' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
+WARNING: [Synth 8-7023] instance 'xadc_inst' of module 'XADC' has 24 connections declared, but only 18 given [rtl/xadc_interface.sv:74]
+WARNING: [Synth 8-6014] Unused sequential element max_amp_reg was removed.  [rtl/timecode_pos_tracker.sv:71]
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_cs driven by constant 1
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_mosi driven by constant 0
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_sck driven by constant 0
+WARNING: [Synth 8-7129] Port btn_up in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port btn_down in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sd_miso in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_cs driven by constant 1
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_mosi driven by constant 0
+WARNING: [Synth 8-3917] design top_dvs_basys3 has port sd_sck driven by constant 0
+WARNING: [Synth 8-7129] Port btn_up in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port btn_down in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port sd_miso in module top_dvs_basys3 is either unconnected or has no load
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[47]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[46]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[45]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[44]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[43]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[42]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[41]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[40]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[39]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[38]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[37]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[36]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[35]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[34]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[33]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[32]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[31]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[30]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[29]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[28]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[27]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[26]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[25]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[24]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[23]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[22]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[21]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[20]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[19]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[18]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[17]) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[47]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[46]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[45]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[44]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[43]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[42]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[41]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[40]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[39]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[38]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[37]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[36]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[35]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[34]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[33]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[32]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[31]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[30]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[29]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[28]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[27]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[26]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[25]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[24]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[23]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[22]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[21]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[20]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[19]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[18]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[17]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[15]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[14]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[13]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[12]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[11]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[10]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[9]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[8]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[7]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[6]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[5]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[4]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[3]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[2]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[1]__0) is unused and will be removed from module top_dvs_basys3.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[0]__0) is unused and will be removed from module top_dvs_basys3.
+
+----IMPLEMENTATION----
+WARNING: [DRC DPOP-1] PREG Output pipelining: DSP led_display_inst/mult_stage10 output led_display_inst/mult_stage10/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+WARNING: [DRC DPOP-1] PREG Output pipelining: DSP led_display_inst/mult_stage10__0 output led_display_inst/mult_stage10__0/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP led_display_inst/mult_stage10 multiplier stage led_display_inst/mult_stage10/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP led_display_inst/mult_stage10__0 multiplier stage led_display_inst/mult_stage10__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP led_display_inst/mult_stage1_reg multiplier stage led_display_inst/mult_stage1_reg/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP led_display_inst/mult_stage1_reg__0 multiplier stage led_display_inst/mult_stage1_reg__0/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
+>>>>>>> origin/jxadc

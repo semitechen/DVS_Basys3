@@ -260,7 +260,6 @@ To safely connect an RCA line-level signal (2V p-p, centered at 0V) to the Basys
 | **Direct Wire** | RCA Ground (Outer) | JXADC Pin 7 / Pin 8 (`vauxn6` / `vauxn14`) |
 
 **Technical Note:** The Artix-7 XADC input range is 0V-1V. The circuit above biases the signal to ~0.6V and provides high-pass coupling to protect the FPGA from negative voltages.
-
 ## Active Audio Output Filter
 
 To achieve professional-grade audio quality, the Delta-Sigma bitstream from the FPGA must be processed by an external Active Sallen-Key Low-Pass Filter.
