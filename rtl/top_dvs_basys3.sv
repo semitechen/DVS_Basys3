@@ -11,16 +11,20 @@
  *  - High-Speed SD Card Engine: 16.67 MHz SPI controller with BRAM double-buffering.
  *  - NCO Variable Speed Audio Player: Streams 44.1 kHz PCM modulated by timecode.
  *  - 16x Oversampled Noise-Shaped DAC: 8-bit R-2R ladder output with TPDF dither.
- *  - Mode Switch (sw[0]):
- *      sw[0] = 1 -> DVS Mode (turntable timecode controls audio speed & platter LEDs).
- *      sw[0] = 0 -> Standalone Mode (fixed 1.0x auto-play & diagnostic dashboard LEDs).
+ *  - Smart Mode Arbitration:
+ *      If Timecode signal is present -> Turntable directly controls pitch, speed & direction.
+ *      If Timecode signal is absent:
+ *          sw[0] = 0 -> Standalone Mode (Fixed 1.0x auto-play).
+ *          sw[0] = 1 -> Vinyl Mute / Stop Mode (needle lifted).
  */
 
 module top_dvs_basys3 (
     input  logic        clk,
     input  logic        rst,
 
-    // Switch wyboru trybu: sw[0] = 1 (DVS Vinyl Mode), sw[0] = 0 (Standalone Auto-Play)
+    // Switch wyboru trybu awaryjnego:
+    // sw[0] = 0 -> Standalone Auto-Play (gdy brak sygnału timecode)
+    // sw[0] = 1 -> Strict DVS (wyciszenie gdy igła jest podniesiona)
     input  logic [0:0]  sw,
 
     // Przyciski zmiany utworów
@@ -45,7 +49,7 @@ module top_dvs_basys3 (
     // Opcjonalne wejście UART z Płytki A (Pmod JC1)
     input  logic        uart_rx_pin,
 
-    // 16 Diod LED (Wskaźnik pozycji winyla w trybie DVS lub Dashboard diagnostyczny)
+    // 16 Diod LED (Wskaźnik pozycji winyla + Status systemu)
     output logic [15:0] led
 );
 
@@ -78,8 +82,8 @@ module top_dvs_basys3 (
     logic        dvs_signal_present;
 
     timecode_pos_tracker #(
-        .HYSTERESIS(13'sd60),
-        .SQUELCH_THRESHOLD(16'd120)
+        .HYSTERESIS(13'sd20),          // ~16mV czułość na sygnał gramofonowy
+        .SQUELCH_THRESHOLD(16'd25)     // ~20mV próg obecności igły
     ) pos_tracker (
         .clk(clk),
         .rst(rst),
@@ -147,20 +151,27 @@ module top_dvs_basys3 (
 
 
     // =========================================================================
-    // 5. Dynamic Speed & Direction Multiplexer
+    // 5. Smart Dynamic Speed & Direction Arbitrator
     // =========================================================================
     logic [15:0] active_speed_factor;
     logic        active_direction;
 
     always_comb begin
-        if (sw[0]) begin
-            // DVS Vinyl Mode: sterowanie bezpośrednio z gramofonu (XADC)
+        if (dvs_signal_present) begin
+            // Sygnał z gramofonu jest obecny -> bezpośrednia kontrola DVS
             active_speed_factor = dvs_speed_factor;
             active_direction    = dvs_direction;
         end else begin
-            // Standalone Mode: stała prędkość 1.0x (lub UART, z watchdiogiem 1.0x)
-            active_speed_factor = uart_speed_factor;
-            active_direction    = uart_direction;
+            // Brak sygnału z gramofonu (igła w górze)
+            if (sw[0]) begin
+                // Tryb Strict DVS: wyciszenie / zatrzymanie
+                active_speed_factor = 16'h0000;
+                active_direction    = 1'b1;
+            end else begin
+                // Tryb Standalone: autoodtwarzanie z prędkością 1.0x
+                active_speed_factor = uart_speed_factor;
+                active_direction    = uart_direction;
+            end
         end
     end
 
@@ -247,22 +258,31 @@ module top_dvs_basys3 (
         else     heartbeat_cnt <= heartbeat_cnt + 26'd1;
     end
 
-    // Dashboard diagnostyczny dla trybu Standalone
-    logic [15:0] diag_dashboard_leds;
-    assign diag_dashboard_leds = {
-        heartbeat_cnt[25],              // [15] Heartbeat (~1.5 Hz)
-        active_direction,               // [14] Direction (1 = FWD, 0 = BWD)
-        dvs_signal_present,             // [13] Timecode signal present
-        sd_ready,                       // [12] SD Card Ready
-        is_playing,                     // [11] Bridge Active Playing
-        fifo_prog_full,                 // [10] FIFO Programmed Full
-        fifo_empty,                     // [9]  FIFO Underflow Warning
-        sw[0],                          // [8]  Active Mode (1 = DVS, 0 = Auto)
-        track_idx[3:0],                 // [7:4] Selected Track ID
-        sd_ctrl_state[3:0]              // [3:0] SD Card Controller FSM State
-    };
-
-    // Przełączanie wizualizacji na diodach LED w zależności od trybu
-    assign led = sw[0] ? dvs_platter_leds : diag_dashboard_leds;
+    // Real-Time System Dashboard on 16 LEDs:
+    // [15] Heartbeat Blinker (~1.5 Hz)
+    // [14] Direction (1 = FWD, 0 = BWD)
+    // [13] Timecode Signal Present Indicator (Lights up when needle is playing!)
+    // [12] SD Card Ready
+    // [11:0] Dynamic Platter Tracker when playing / System state
+    always_comb begin
+        if (dvs_signal_present) begin
+            // Sygnał wykryty: górne 3 diody to status, dolne 13 diod to płynny wskaźnik obrotu winyla
+            led = {heartbeat_cnt[25], active_direction, dvs_signal_present, dvs_platter_leds[12:0]};
+        end else begin
+            // Brak sygnału timecode: pełny dashboard diagnostyczny
+            led = {
+                heartbeat_cnt[25],              // [15] Heartbeat
+                active_direction,               // [14] Direction
+                dvs_signal_present,             // [13] Timecode signal present (0)
+                sd_ready,                       // [12] SD Card Ready
+                is_playing,                     // [11] Bridge Active
+                fifo_prog_full,                 // [10] FIFO Full
+                fifo_empty,                     // [9]  FIFO Empty
+                sw[0],                          // [8]  Switch SW0
+                track_idx[3:0],                 // [7:4] Selected Track ID
+                sd_ctrl_state[3:0]              // [3:0] SD Card Controller State
+            };
+        end
+    end
 
 endmodule

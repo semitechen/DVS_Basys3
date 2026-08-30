@@ -8,16 +8,16 @@
  *
  * Robust Noise Immunity & Silence Detection:
  *  1. 32-bit Fixed-Point Dynamic DC Estimator (zero DC offset, no bit-width overflow).
- *  2. Dual Schmitt-Trigger Hysteresis (Left & Right) with parameterizable threshold.
- *  3. Fast-Attack / Slow-Decay Envelope Squelch Gate (silence squelch ~120mV).
+ *  2. Dual Schmitt-Trigger Hysteresis (Left & Right) with high sensitivity.
+ *  3. Fast-Attack / Slow-Decay Envelope Squelch Gate (silence squelch ~20mV).
  *  4. 4x Gray-Code Quadrature State Machine (11.025 samples per quarter-cycle step).
  *  5. 32.32 Fixed-Point Sub-Sample Position Accumulator.
  *  6. Real-Time Variable Speed Factor Estimator (Q4.12: 16'h1000 = 1.0x).
  */
 
 module timecode_pos_tracker #(
-    parameter signed [12:0] HYSTERESIS        = 13'sd80, // Noise immunity threshold (~65mV)
-    parameter logic  [15:0] SQUELCH_THRESHOLD = 16'd150  // Squelch threshold for silence/stop (~120mV)
+    parameter signed [12:0] HYSTERESIS        = 13'sd20, // High sensitivity threshold (~16mV)
+    parameter logic  [15:0] SQUELCH_THRESHOLD = 16'd25   // Squelch threshold for silence/stop (~20mV)
 )(
     input  logic        clk,            // 100 MHz System Clock
     input  logic        rst,            // Reset / Zero position
@@ -185,10 +185,9 @@ module timecode_pos_tracker #(
 
 
     // --- 5. Real-Time DVS Speed Factor Estimator (Q4.12 Format) ---
-    // At nominal 1.0x speed, 4 quadrature steps per 1000 Hz cycle = 25,000 clock cycles @ 100 MHz.
-    // Base constant: 25,000 * 4096 = 102,400,000 (27'd102_400_000).
-    // Timeout for stopped vinyl: 2,500,000 cycles (25 ms timeout = 0.01x minimum speed cutoff).
-    localparam logic [23:0] STEP_TIMEOUT = 24'd2_500_000;
+    // Nominal 1.0x speed = 25,000 clock cycles between steps @ 100 MHz.
+    // 25,000 * 4096 = 102,400,000.
+    localparam logic [23:0] STEP_TIMEOUT = 24'd2_500_000; // 25 ms timeout
 
     logic [23:0] step_timer;
     logic [23:0] last_step_period;
@@ -209,11 +208,10 @@ module timecode_pos_tracker #(
                 step_timer <= step_timer + 24'd1;
             end
 
-            // Instantaneous speed calculation (clamped to 4.0x max = 16'h4000)
+            // Instantaneous speed calculation
             if (!signal_present || step_timer >= STEP_TIMEOUT) begin
                 instantaneous_speed <= 16'd0;
             end else begin
-                // Fast fixed-point division: 102,400,000 / last_step_period
                 if (last_step_period <= 24'd6_250) begin
                     instantaneous_speed <= 16'h4000; // 4.0x cap
                 end else begin
@@ -221,8 +219,7 @@ module timecode_pos_tracker #(
                 end
             end
 
-            // 1st-Order IIR Low-Pass Smoothing Filter on Speed Factor (Leaky Integrator)
-            // filtered = filtered + (instantaneous - filtered) / 8
+            // Leaky integrator low-pass smoothing
             filtered_speed <= filtered_speed + $signed(($signed({1'b0, instantaneous_speed}) - $signed({1'b0, filtered_speed})) >>> 3);
         end
     end
