@@ -1,25 +1,38 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2026-08-10 15:14:58
+Created: 2026-08-30 11:17:42
 
 ----SYNTHESIS----
-WARNING: [Synth 8-3917] design top_sd_test has port led[14] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[13] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[12] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[11] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[10] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[9] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[8] driven by constant 0
+WARNING: [Synth 8-7071] port 'prog_empty' of module 'audio_fifo' is unconnected for instance 'fifo' [rtl/top_board_b_player.sv:90]
+WARNING: [Synth 8-7023] instance 'fifo' of module 'audio_fifo' has 10 connections declared, but only 9 given [rtl/top_board_b_player.sv:90]
+WARNING: [Synth 8-3936] Found unconnected internal register 'current_increment_reg' and it is trimmed from '48' to '32' bits. [rtl/variable_speed_player.sv:33]
+WARNING: [Synth 8-7129] Port led[14] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[13] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[12] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[10] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[9] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[7] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[6] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[5] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[4] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[3] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[2] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[1] in module top_board_b_player is either unconnected or has no load
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-WARNING: [Synth 8-3917] design top_sd_test has port led[14] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[13] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[12] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[11] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[10] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[9] driven by constant 0
-WARNING: [Synth 8-3917] design top_sd_test has port led[8] driven by constant 0
+WARNING: [Synth 8-7129] Port led[14] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[13] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[12] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[10] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[9] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[7] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[6] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[5] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[4] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[3] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[2] in module top_board_b_player is either unconnected or has no load
+WARNING: [Synth 8-7129] Port led[1] in module top_board_b_player is either unconnected or has no load
 
 ----IMPLEMENTATION----
-WARNING: [Place 46-29] place_design is not in timing mode. Skip physical synthesis in placer
-WARNING: [Power 33-232] No user defined clocks were found in the design! Power estimation will be inaccurate until this is corrected.
-WARNING: [Timing 38-313] There are no user specified timing constraints. Timing constraints are needed for proper timing analysis.
+WARNING: [DRC DPIP-1] Input pipelining: DSP v_player/phase_accumulator2 input v_player/phase_accumulator2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.
+WARNING: [DRC DPOP-1] PREG Output pipelining: DSP v_player/phase_accumulator2 output v_player/phase_accumulator2/P[47:0] is not pipelined (PREG=0). Pipelining the DSP48 output will improve performance and often saves power so it is suggested whenever possible to fully pipeline this function.  If this DSP48 function was inferred, it is suggested to describe an additional register stage after this function.  If the DSP48 was instantiated in the design, it is suggested to set the PREG attribute to 1.
+WARNING: [DRC DPOP-2] MREG Output pipelining: DSP v_player/phase_accumulator2 multiplier stage v_player/phase_accumulator2/P[47:0] is not pipelined (MREG=0). Pipelining the multiplier function will improve performance and will save significant power so it is suggested whenever possible to fully pipeline this function.  If this multiplier was inferred, it is suggested to describe an additional register stage after this function.  If there is no registered adder/accumulator following the multiply function, two pipeline stages are suggested to allow both the MREG and PREG registers to be used.  If the DSP48 was instantiated in the design, it is suggested to set both the MREG and PREG attributes to 1 when performing multiply functions.
