@@ -1,6 +1,5 @@
 import wave
 import os
-import struct
 import array
 
 INPUT_DIR = "tools/audio_in"           
@@ -12,7 +11,6 @@ def process_audio():
     if not os.path.exists(INPUT_DIR):
         os.makedirs(INPUT_DIR)
         print(f"Utworzono folder '{INPUT_DIR}'.")
-        print("Wrzuc tam pliki muzyczne (.wav) i uruchom skrypt ponownie.")
         return
 
     wav_files = [f for f in os.listdir(INPUT_DIR) if f.lower().endswith('.wav')]
@@ -21,33 +19,44 @@ def process_audio():
         return
 
     wav_files.sort() 
-    
     lut_entries = []
     current_lba_sector = 0 
 
-    print("Rozpoczynam konwersje audio (16-bit -> 8-bit unsigned)...")
+    print("Rozpoczynam konwersje audio z zaawansowanym DSP...")
 
     with open(OUTPUT_IMG, 'wb') as f_out:
         for track_idx, filename in enumerate(wav_files):
             filepath = os.path.join(INPUT_DIR, filename)
             
             with wave.open(filepath, 'rb') as wav:
+                # 1. Walidacja parametrów (Ad 1)
                 if wav.getsampwidth() != 2:
-                    print(f"BLAD: Plik {filename} nie jest 16-bitowy! Skrypt wymaga 16-bitowych plikow.")
+                    print(f"POMINIETO: {filename} (Wymagane 16-bit PCM)")
+                    continue
+                if wav.getframerate() != 44100:
+                    print(f"POMINIETO: {filename} (Wymagane 44.1 kHz, wykryto {wav.getframerate()} Hz)")
                     continue
                 
                 channels = wav.getnchannels()
                 frames = wav.readframes(wav.getnframes())
                 samples_16bit = array.array('h', frames)
                 
-                # Inżynierska poprawka: Konwersja Stereo do Mono w locie
+                # 2. Downmix Stereo do Mono (Ad 2)
                 if channels == 2:
-                    print(f"[{track_idx}] Konwersja Stereo -> Mono dla pliku {filename}")
-                    mono_samples = samples_16bit[0::2] # Pobieramy co drugą próbkę (tylko lewy kanał)
+                    # Szybkie wyliczenie średniej z (L + R)
+                    mono_samples = [(samples_16bit[i] + samples_16bit[i+1]) // 2 for i in range(0, len(samples_16bit), 2)]
                 else:
                     mono_samples = samples_16bit
-                
-                # Obcięcie do 8 bitów i zmiana na wartości bez znaku (+128)
+
+                # 3. Peak Normalization (Ad 3) - Ochrona przed clippingiem
+                max_val = max(abs(s) for s in mono_samples) if mono_samples else 1
+                # Zostawiamy margines 5% (-0.45 dBFS), żeby uniknąć uderzenia w wartości ekstremalne
+                target_max = 31000 
+                if max_val > 0:
+                    scale_factor = target_max / max_val
+                    mono_samples = [int(s * scale_factor) for s in mono_samples]
+
+                # Konwersja na 8-bit unsigned (Przesunięcie i offset)
                 samples_8bit = bytearray((s >> 8) + 128 for s in mono_samples)
                 
                 f_out.write(samples_8bit)
@@ -55,38 +64,22 @@ def process_audio():
                 bytes_written = len(samples_8bit)
                 padding = (SECTOR_SIZE - (bytes_written % SECTOR_SIZE)) % SECTOR_SIZE
                 if padding != 0:
-                    # Poprawka sprzętowa: padding ciszą analogową (1.65V), nie zerami (0V)
-                    f_out.write(b'\x80' * padding)
-                
-                lut_entries.append((track_idx, current_lba_sector, filename))
+                    f_out.write(b'\x80' * padding) # Cisza analogowa
                 
                 sectors_used = (bytes_written + padding) // SECTOR_SIZE
+                lut_entries.append((track_idx, current_lba_sector, filename))
                 current_lba_sector += sectors_used
                 
-                print(f"[{track_idx}] {filename} -> Adres (LBA): {lut_entries[-1][1]}, Rozmiar: {sectors_used} sektorow.")
+                print(f"[{track_idx}] {filename} -> Sukces. Adres LBA: {lut_entries[-1][1]}")
 
-    print("\nGenerowanie modulu SystemVerilog (Track LUT)...")
+    # Aktualizacja LUT (bez zmian)
     with open(LUT_FILE, 'w') as f_sv:
-        f_sv.write("// AUTOMATYCZNIE WYGENEROWANY PLIK - NIE EDYTUJ RECZNIE\n")
-        f_sv.write("// Skrypt wav_to_sd.py\n\n")
-        f_sv.write("`timescale 1ns / 1ps\n\n")
-        f_sv.write("module track_lut (\n")
-        f_sv.write("    input  logic [7:0]  track_id,\n")
-        f_sv.write("    output logic [31:0] start_lba\n")
-        f_sv.write(");\n\n")
-        f_sv.write("    always_comb begin\n")
-        f_sv.write("        case (track_id)\n")
-        
+        f_sv.write("// AUTOMATYCZNIE WYGENEROWANY PLIK\n`timescale 1ns / 1ps\n\nmodule track_lut (\n    input  logic [7:0]  track_id,\n    output logic [31:0] start_lba\n);\n    always_comb begin\n        case (track_id)\n")
         for entry in lut_entries:
-            f_sv.write(f"            8'd{entry[0]}: start_lba = 32'd{entry[1]}; // Plik: {entry[2]}\n")
-            
-        f_sv.write("            default: start_lba = 32'd0;\n")
-        f_sv.write("        endcase\n")
-        f_sv.write("    end\n")
-        f_sv.write("endmodule\n")
-        
-    print(f"\nSukces! Gotowy obraz 8-bitowy do wgrania na karte: {OUTPUT_IMG}")
-    print(f"Zaktualizowano modul z adresami: {LUT_FILE}")
+            f_sv.write(f"            8'd{entry[0]}: start_lba = 32'd{entry[1]};\n")
+        f_sv.write("            default: start_lba = 32'd0;\n        endcase\n    end\nendmodule\n")
+
+    print("\nGotowe. Nowy obraz wygenerowany.")
 
 if __name__ == "__main__":
     process_audio()
