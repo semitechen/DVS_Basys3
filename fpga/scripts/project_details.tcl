@@ -27,6 +27,7 @@ set xdc_files {
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
     ../rtl/top_board_b_player.sv
+    ../rtl/r2r_dac.sv
     ../rtl/track_selector.sv
     ../rtl/track_lut.sv
     ../rtl/spi_master.sv

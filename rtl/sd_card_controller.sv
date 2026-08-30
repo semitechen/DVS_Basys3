@@ -18,7 +18,9 @@ module sd_card_controller (
     output logic        sd_cs,
     output logic        sd_sck,
     output logic        sd_mosi,
-    input  logic        sd_miso
+    input  logic        sd_miso,
+
+    output logic [3:0]  ctrl_state
 );
 
     logic        spi_start;
@@ -70,8 +72,9 @@ module sd_card_controller (
     logic [9:0]  byte_cnt, byte_cnt_nxt;
     logic        sd_ready_reg, sd_ready_nxt;
 
-    assign sd_cs    = sd_cs_reg;
-    assign sd_ready = sd_ready_reg;
+    assign sd_cs      = sd_cs_reg;
+    assign sd_ready   = sd_ready_reg;
+    assign ctrl_state = state;
 
     always_comb begin
         state_nxt           = state;
@@ -85,7 +88,7 @@ module sd_card_controller (
         
         spi_start           = 1'b0;
         spi_data_in         = 8'hFF;
-        spi_clk_div         = 16'd250; 
+        spi_clk_div         = (state >= ST_IDLE) ? 16'd2 : 16'd250; 
         out_valid           = 1'b0;
         out_byte            = 8'h00;
 

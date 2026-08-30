@@ -14,10 +14,13 @@ module track_selector #(
     input  logic        btn_down_pulse,
     
     output logic [31:0] start_addr,
-    output logic        play_req
+    output logic        play_req,
+    output logic [7:0]  current_track_idx
 );
 
     logic [7:0] track_idx;
+
+    assign current_track_idx = track_idx;
     
     // 1. Logika zmiany numeru utworu
     always_ff @(posedge clk) begin
