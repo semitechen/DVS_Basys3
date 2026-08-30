@@ -76,38 +76,6 @@ set_property PACKAGE_PIN P1 [get_ports {led[14]}]
 	set_property IOSTANDARD LVCMOS33 [get_ports {led[14]}]
 set_property PACKAGE_PIN L1 [get_ports {led[15]}]
 	set_property IOSTANDARD LVCMOS33 [get_ports {led[15]}]
-set_property PACKAGE_PIN U16 [get_ports {led[0]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[0]}]
-set_property PACKAGE_PIN E19 [get_ports {led[1]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}]
-set_property PACKAGE_PIN U19 [get_ports {led[2]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[2]}]
-set_property PACKAGE_PIN V19 [get_ports {led[3]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[3]}]
-set_property PACKAGE_PIN W18 [get_ports {led[4]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[4]}]
-set_property PACKAGE_PIN U15 [get_ports {led[5]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[5]}]
-set_property PACKAGE_PIN U14 [get_ports {led[6]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[6]}]
-set_property PACKAGE_PIN V14 [get_ports {led[7]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[7]}]
-set_property PACKAGE_PIN V13 [get_ports {led[8]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[8]}]
-set_property PACKAGE_PIN V3 [get_ports {led[9]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[9]}]
-set_property PACKAGE_PIN W3 [get_ports {led[10]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[10]}]
-set_property PACKAGE_PIN U3 [get_ports {led[11]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[11]}]
-set_property PACKAGE_PIN P3 [get_ports {led[12]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[12]}]
-set_property PACKAGE_PIN N3 [get_ports {led[13]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[13]}]
-set_property PACKAGE_PIN P1 [get_ports {led[14]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[14]}]
-set_property PACKAGE_PIN L1 [get_ports {led[15]}]
-	set_property IOSTANDARD LVCMOS33 [get_ports {led[15]}]
 
 
 ##7 segment display
@@ -140,7 +108,7 @@ set_property PACKAGE_PIN L1 [get_ports {led[15]}]
 
 
 ##Buttons
-set_property PACKAGE_PIN U18 [get_ports rst]
+set_property PACKAGE_PIN U18 [get_ports rst]  
     set_property IOSTANDARD LVCMOS33 [get_ports rst]
 set_property PACKAGE_PIN T18 [get_ports btn_up]
     set_property IOSTANDARD LVCMOS33 [get_ports btn_up]
@@ -220,8 +188,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports {dac[0]}]
 
 ##Pmod Header JC
 ##Sch name = JC1
-#set_property PACKAGE_PIN K17 [get_ports sd_cs]
- #   set_property IOSTANDARD LVCMOS33 [get_ports sd_cs]
+set_property PACKAGE_PIN K17 [get_ports uart_rx_pin]
+set_property IOSTANDARD LVCMOS33 [get_ports uart_rx_pin]
 ##Sch name = JC2
 #set_property PACKAGE_PIN M18 [get_ports sd_mosi]
  #   set_property IOSTANDARD LVCMOS33 [get_ports sd_mosi]
@@ -247,11 +215,11 @@ set_property IOSTANDARD LVCMOS33 [get_ports {dac[0]}]
 
 ##Pmod Header JXADC
 ##Sch name = XA1_P
-set_property PACKAGE_PIN J3 [get_ports vauxp6]
-    set_property IOSTANDARD LVCMOS33 [get_ports vauxp6]
+#set_property PACKAGE_PIN J3 [get_ports vauxp6]
+#    set_property IOSTANDARD LVCMOS33 [get_ports vauxp6]
 ##Sch name = XA2_P
-set_property PACKAGE_PIN L3 [get_ports vauxp14]
-set_property IOSTANDARD LVCMOS33 [get_ports vauxp14]
+#set_property PACKAGE_PIN L3 [get_ports vauxp14]
+#set_property IOSTANDARD LVCMOS33 [get_ports vauxp14]
 
 ##Sch name = XA3_P (Górny rząd, pin 3)
 set_property PACKAGE_PIN M2 [get_ports {dac[4]}]
@@ -262,12 +230,12 @@ set_property PACKAGE_PIN N2 [get_ports {dac[6]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {dac[6]}]
 
 ##Sch name = XA1_N (Kanal 6 - Lewy N)
-set_property PACKAGE_PIN K3 [get_ports vauxn6]
-set_property IOSTANDARD LVCMOS33 [get_ports vauxn6]
+#set_property PACKAGE_PIN K3 [get_ports vauxn6]
+#set_property IOSTANDARD LVCMOS33 [get_ports vauxn6]
 
 ##Sch name = XA2_N
-set_property PACKAGE_PIN M3 [get_ports vauxn14]
-set_property IOSTANDARD LVCMOS33 [get_ports vauxn14]
+#set_property PACKAGE_PIN M3 [get_ports vauxn14]
+#set_property IOSTANDARD LVCMOS33 [get_ports vauxn14]
 
 ##Sch name = XA3_N (Dolny rząd, pin 3)
 set_property PACKAGE_PIN M1 [get_ports {dac[5]}]

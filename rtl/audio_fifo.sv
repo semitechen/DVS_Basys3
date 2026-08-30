@@ -19,11 +19,15 @@ module audio_fifo #(
     
     output logic empty,
     output logic full,
-    output logic  prog_empty 
+    output logic prog_empty,
+    output logic prog_full       
 );
 
     localparam FIFO_DEPTH = 2**ADDR_WIDTH;
     localparam PROG_EMPTY_THRESH = FIFO_DEPTH / 4; 
+    
+    //Prog ostroznosci- margines na przynajmniej jeden pelny sektor (512 bajtów)
+    localparam PROG_FULL_THRESH = FIFO_DEPTH - 512; 
 
     // BRAM
     logic [DATA_WIDTH-1:0] mem [0:FIFO_DEPTH-1];
@@ -37,6 +41,9 @@ module audio_fifo #(
     assign empty = (count == 0);
     assign full = (count == FIFO_DEPTH);
     assign prog_empty = (count <= PROG_EMPTY_THRESH);
+    
+    // DODANE: Logika zapalania flagi prog_full
+    assign prog_full = (count >= PROG_FULL_THRESH);
 
     always_comb begin
         wr_ptr_nxt = wr_ptr;
@@ -55,7 +62,6 @@ module audio_fifo #(
     end
 
     // Synchroniczny zapis do BRAM 
-    // (BRAM musi byc sterowany sygnalem zegarowym, dlatego ma wlasny blok sekwencyjny)
     always_ff @(posedge clk) begin
         if (wr_en && !full) begin
             mem[wr_ptr] <= wr_data;
