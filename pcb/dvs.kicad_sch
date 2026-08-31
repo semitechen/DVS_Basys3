@@ -3274,16 +3274,6 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 111.76) (xy 248.92 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "565924e1-a170-4a92-8a3a-5e96c57498a0")
-	)
-	(wire
-		(pts
 			(xy 100.33 111.76) (xy 100.33 116.84)
 		)
 		(stroke
@@ -3384,6 +3374,16 @@
 	)
 	(wire
 		(pts
+			(xy 245.11 111.76) (xy 248.92 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c0ecbf6-0210-4d9d-9eb1-dbc51be729fa")
+	)
+	(wire
+		(pts
 			(xy 148.59 129.54) (xy 148.59 137.16)
 		)
 		(stroke
@@ -3451,6 +3451,16 @@
 			(type default)
 		)
 		(uuid "7b15f967-c77d-4b26-95f5-622e39fb2bb4")
+	)
+	(wire
+		(pts
+			(xy 245.11 106.68) (xy 245.11 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7bf13fd3-0bc9-481b-bc35-215331447a17")
 	)
 	(wire
 		(pts
@@ -8843,6 +8853,84 @@
 				(path "/72127889-723a-4a1a-a1d5-6b20fe0a1f96"
 					(reference "U1")
 					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 245.11 106.68 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a703a469-cccc-4bed-9ca9-468a72ad6c61")
+		(property "Reference" "#PWR031"
+			(at 245.11 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 245.11 101.6 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 245.11 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 245.11 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 245.11 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0eccb919-d643-4480-9cda-c43b7c8c84e1")
+		)
+		(instances
+			(project "dvs"
+				(path "/72127889-723a-4a1a-a1d5-6b20fe0a1f96"
+					(reference "#PWR031")
+					(unit 1)
 				)
 			)
 		)
