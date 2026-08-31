@@ -28,15 +28,22 @@ module variable_speed_player (
     localparam logic [31:0] BASE_INCREMENT = 32'd1894125;
 
     logic [31:0] phase_accumulator;
-    logic [47:0] current_increment; 
+    logic [31:0] inc_reg;
     logic [32:0] next_phase; // 33 bity, aby złapać moment przepełnienia (carry)
     logic [7:0]  sample_reg;
     logic        fifo_rd_en_d;
 
-    // Obliczanie aktualnego przyrostu z rzutowaniem do 48 bitów, aby zapobiec obcięciu 32-bitowemu
+    // Pipelined multiply stage to meet 100 MHz timing closure
+    always_ff @(posedge clk) begin
+        if (rst) begin
+            inc_reg <= 32'd0;
+        end else begin
+            inc_reg <= ((48'(BASE_INCREMENT) * 48'(speed_factor)) >> 12);
+        end
+    end
+
     always_comb begin
-        current_increment = (48'(BASE_INCREMENT) * 48'(speed_factor)) >> 12;
-        next_phase = phase_accumulator + current_increment[31:0];
+        next_phase = phase_accumulator + inc_reg;
     end
 
     // Akumulator fazy i potokowy odczyt z bufora

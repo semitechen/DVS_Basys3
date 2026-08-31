@@ -17,6 +17,11 @@ if {[info exists ::env(TOP_MODULE)] && $::env(TOP_MODULE) ne ""} {
     set project_name $::env(TOP_MODULE)
 }
 
+# Auto-select matching dedicated XDC file for the selected top module to ensure 0 Critical Warnings
+if {[file exists "constraints/${top_module}.xdc"]} {
+    set xdc_files [list "constraints/${top_module}.xdc"]
+}
+
 # Create project
 proc create_new_project {project_name target top_module} {
     file mkdir build

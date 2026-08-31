@@ -12,7 +12,7 @@
  *  3. Fast-Attack / Slow-Decay Envelope Squelch Gate (silence squelch ~20mV).
  *  4. 4x Gray-Code Quadrature State Machine (11.025 samples per quarter-cycle step).
  *  5. 32.32 Fixed-Point Sub-Sample Position Accumulator.
- *  6. Real-Time Variable Speed Factor Estimator (Q4.12: 16'h1000 = 1.0x).
+ *  6. Sequential Multi-Cycle Speed Factor Estimator (Q4.12: 16'h1000 = 1.0x, WNS > 0).
  */
 
 module timecode_pos_tracker #(
@@ -190,36 +190,64 @@ module timecode_pos_tracker #(
     localparam logic [23:0] STEP_TIMEOUT = 24'd2_500_000; // 25 ms timeout
 
     logic [23:0] step_timer;
-    logic [23:0] last_step_period;
     logic [15:0] instantaneous_speed;
     logic [15:0] filtered_speed;
+
+    // Fast 16-cycle sequential restoring divider for zero timing violations at 100 MHz
+    logic [43:0] div_rem;
+    logic [23:0] div_divisor;
+    logic [4:0]  div_counter;
+    logic        div_active;
 
     always_ff @(posedge clk) begin
         if (rst) begin
             step_timer          <= 24'd0;
-            last_step_period    <= 24'd25_000;
             instantaneous_speed <= 16'd0;
             filtered_speed      <= 16'd0;
+            div_rem             <= 44'd0;
+            div_divisor         <= 24'd0;
+            div_counter         <= 5'd0;
+            div_active          <= 1'b0;
         end else begin
+            // Step Timer & Step Trigger
             if (fwd_step || rev_step) begin
-                last_step_period <= (step_timer > 24'd1000) ? step_timer : 24'd1000;
-                step_timer       <= 24'd0;
+                step_timer <= 24'd0;
+                if (step_timer <= 24'd6_250) begin
+                    instantaneous_speed <= 16'h4000; // 4.0x cap
+                    div_active          <= 1'b0;
+                end else begin
+                    // Launch division: 102,400,000 / step_timer (takes 16 clock cycles)
+                    div_rem     <= {16'd0, 28'd102_400_000};
+                    div_divisor <= (step_timer > 24'd1000) ? step_timer : 24'd1000;
+                    div_counter <= 5'd16;
+                    div_active  <= 1'b1;
+                end
             end else if (step_timer < STEP_TIMEOUT) begin
                 step_timer <= step_timer + 24'd1;
             end
 
-            // Instantaneous speed calculation
-            if (!signal_present || step_timer >= STEP_TIMEOUT) begin
-                instantaneous_speed <= 16'd0;
-            end else begin
-                if (last_step_period <= 24'd6_250) begin
-                    instantaneous_speed <= 16'h4000; // 4.0x cap
+            // Sequential Restoring Shift-and-Subtract Division Step
+            if (div_active) begin
+                if (div_counter > 5'd0) begin
+                    div_counter <= div_counter - 5'd1;
+                    if (div_rem[43:16] >= div_divisor) begin
+                        div_rem <= {div_rem[43:16] - div_divisor, div_rem[15:0], 1'b1} << 1;
+                    end else begin
+                        div_rem <= div_rem << 1;
+                    end
                 end else begin
-                    instantaneous_speed <= 28'd102_400_000 / last_step_period;
+                    div_active <= 1'b0;
+                    instantaneous_speed <= (div_rem[16:1] > 16'h4000) ? 16'h4000 : div_rem[16:1];
                 end
             end
 
-            // Leaky integrator low-pass smoothing
+            // Stopped vinyl timeout or squelch gate
+            if (!signal_present || step_timer >= STEP_TIMEOUT) begin
+                instantaneous_speed <= 16'd0;
+                div_active          <= 1'b0;
+            end
+
+            // Leaky integrator low-pass smoothing (100 MHz Leaky Filter)
             filtered_speed <= filtered_speed + $signed(($signed({1'b0, instantaneous_speed}) - $signed({1'b0, filtered_speed})) >>> 3);
         end
     end
