@@ -19,7 +19,8 @@ module variable_speed_player (
     input  logic [15:0] speed_factor,
 
     // Wyjście próbki audio (8-bit unsigned PCM)
-    output logic [7:0]  sample_out
+    output logic [7:0]  sample_out,
+    output logic        sample_valid // Impuls 1-cyklowy wskazujący pojawienie się nowej próbki
 );
 
     // Bazowy przyrost fazy dla 44.1 kHz przy zegarze 100 MHz:
@@ -67,6 +68,7 @@ module variable_speed_player (
         end
     end
 
-    assign sample_out = sample_reg;
+    assign sample_out   = sample_reg;
+    assign sample_valid = fifo_rd_en_d;
 
 endmodule
