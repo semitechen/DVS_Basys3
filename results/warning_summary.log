@@ -1,6 +1,6 @@
 Warnings, critical warnings and errors from synthesis and implementation
 
-Created: 2026-08-30 19:48:08
+Created: 2026-08-30 22:04:48
 
 ----SYNTHESIS----
 WARNING: [Synth 8-7071] port 'JTAGBUSY' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
@@ -11,93 +11,167 @@ WARNING: [Synth 8-7071] port 'CONVST' of module 'XADC' is unconnected for instan
 WARNING: [Synth 8-7071] port 'CONVSTCLK' of module 'XADC' is unconnected for instance 'xadc_inst' [rtl/xadc_interface.sv:74]
 WARNING: [Synth 8-7023] instance 'xadc_inst' of module 'XADC' has 24 connections declared, but only 18 given [rtl/xadc_interface.sv:74]
 WARNING: [Synth 8-6014] Unused sequential element max_amp_reg was removed.  [rtl/timecode_pos_tracker.sv:70]
-WARNING: [Synth 8-7071] port 'prog_empty' of module 'audio_fifo' is unconnected for instance 'fifo' [rtl/top_dvs_basys3.sv:203]
-WARNING: [Synth 8-7023] instance 'fifo' of module 'audio_fifo' has 10 connections declared, but only 9 given [rtl/top_dvs_basys3.sv:203]
-WARNING: [Synth 8-3936] Found unconnected internal register 'current_increment_reg' and it is trimmed from '48' to '32' bits. [rtl/variable_speed_player.sv:37]
-WARNING: [Synth 8-6014] Unused sequential element v_sample_reg was removed.  [rtl/r2r_dac.sv:114]
-WARNING: [Synth 8-6014] Unused sequential element next_err_reg was removed.  [rtl/r2r_dac.sv:119]
-WARNING: [Synth 8-6014] Unused sequential element q_val_reg was removed.  [rtl/r2r_dac.sv:126]
+WARNING: [Synth 8-7071] port 'prog_empty' of module 'audio_fifo' is unconnected for instance 'fifo' [rtl/top_board_a_streamer.sv:190]
+WARNING: [Synth 8-7023] instance 'fifo' of module 'audio_fifo' has 10 connections declared, but only 9 given [rtl/top_board_a_streamer.sv:190]
+WARNING: [Synth 8-3936] Found unconnected internal register 'current_increment_reg' and it is trimmed from '48' to '32' bits. [rtl/variable_speed_player.sv:38]
+WARNING: [Vivado 12-584] No ports matched 'dac[3]'. [fpga/constraints/top_dvs_basys3.xdc:74]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:74]
+WARNING: [Vivado 12-584] No ports matched 'dac[3]'. [fpga/constraints/top_dvs_basys3.xdc:75]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:75]
+WARNING: [Vivado 12-584] No ports matched 'dac[2]'. [fpga/constraints/top_dvs_basys3.xdc:78]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:78]
+WARNING: [Vivado 12-584] No ports matched 'dac[2]'. [fpga/constraints/top_dvs_basys3.xdc:79]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:79]
+WARNING: [Vivado 12-584] No ports matched 'dac[1]'. [fpga/constraints/top_dvs_basys3.xdc:82]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:82]
+WARNING: [Vivado 12-584] No ports matched 'dac[1]'. [fpga/constraints/top_dvs_basys3.xdc:83]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:83]
+WARNING: [Vivado 12-584] No ports matched 'dac[0]'. [fpga/constraints/top_dvs_basys3.xdc:86]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:86]
+WARNING: [Vivado 12-584] No ports matched 'dac[0]'. [fpga/constraints/top_dvs_basys3.xdc:87]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:87]
+WARNING: [Vivado 12-584] No ports matched 'uart_rx_pin'. [fpga/constraints/top_dvs_basys3.xdc:91]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:91]
+WARNING: [Vivado 12-584] No ports matched 'uart_rx_pin'. [fpga/constraints/top_dvs_basys3.xdc:92]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:92]
+WARNING: [Vivado 12-584] No ports matched 'uart_rx_pin'. [fpga/constraints/top_dvs_basys3.xdc:93]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:93]
+WARNING: [Vivado 12-584] No ports matched 'dac[4]'. [fpga/constraints/top_dvs_basys3.xdc:116]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:116]
+WARNING: [Vivado 12-584] No ports matched 'dac[4]'. [fpga/constraints/top_dvs_basys3.xdc:117]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:117]
+WARNING: [Vivado 12-584] No ports matched 'dac[5]'. [fpga/constraints/top_dvs_basys3.xdc:120]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:120]
+WARNING: [Vivado 12-584] No ports matched 'dac[5]'. [fpga/constraints/top_dvs_basys3.xdc:121]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:121]
+WARNING: [Vivado 12-584] No ports matched 'dac[6]'. [fpga/constraints/top_dvs_basys3.xdc:124]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:124]
+WARNING: [Vivado 12-584] No ports matched 'dac[6]'. [fpga/constraints/top_dvs_basys3.xdc:125]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:125]
+WARNING: [Vivado 12-584] No ports matched 'dac[7]'. [fpga/constraints/top_dvs_basys3.xdc:128]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:128]
+WARNING: [Vivado 12-584] No ports matched 'dac[7]'. [fpga/constraints/top_dvs_basys3.xdc:129]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:129]
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[47]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[46]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[45]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[44]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[43]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[42]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[41]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[40]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[39]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[38]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[37]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[36]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[35]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[34]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[33]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[32]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[31]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[30]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[29]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[28]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[27]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[26]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[25]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[24]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[23]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[22]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[21]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[20]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[19]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[18]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[17]) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[47]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[46]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[45]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[44]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[43]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[42]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[41]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[40]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[39]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[38]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[37]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[36]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[35]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[34]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[33]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[32]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[31]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[30]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[29]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[28]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[27]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[26]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[25]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[24]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[23]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[22]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[21]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[20]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[19]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[18]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[17]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[15]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[14]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[13]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[12]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[11]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[10]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[9]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[8]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[7]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[6]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[5]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[4]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[3]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[2]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[1]__0) is unused and will be removed from module led_pos_display.
-WARNING: [Synth 8-3332] Sequential element (mult_stage1_reg[0]__0) is unused and will be removed from module led_pos_display.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[47]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[46]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[45]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[44]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[43]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[42]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[41]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[40]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[39]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[38]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[37]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[36]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[35]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[34]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[33]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[32]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[31]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[30]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[29]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[28]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[27]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[26]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[25]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[24]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[23]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[22]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[21]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[20]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[19]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[18]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[17]) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[47]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[46]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[45]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[44]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[43]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[42]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[41]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[40]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[39]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[38]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[37]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[36]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[35]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[34]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[33]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[32]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[31]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[30]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[29]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[28]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[27]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[26]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[25]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[24]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[23]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[22]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[21]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[20]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[19]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[18]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[17]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[15]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[14]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[13]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[12]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[11]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[10]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[9]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[8]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[7]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[6]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[5]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[4]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[3]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[2]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[1]__0) is unused and will be removed from module top_board_a_streamer.
+WARNING: [Synth 8-3332] Sequential element (led_display_inst/mult_stage1_reg[0]__0) is unused and will be removed from module top_board_a_streamer.
+INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
 
 ----IMPLEMENTATION----
+WARNING: [Vivado 12-584] No ports matched 'dac[3]'. [fpga/constraints/top_dvs_basys3.xdc:74]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:74]
+WARNING: [Vivado 12-584] No ports matched 'dac[3]'. [fpga/constraints/top_dvs_basys3.xdc:75]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:75]
+WARNING: [Vivado 12-584] No ports matched 'dac[2]'. [fpga/constraints/top_dvs_basys3.xdc:78]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:78]
+WARNING: [Vivado 12-584] No ports matched 'dac[2]'. [fpga/constraints/top_dvs_basys3.xdc:79]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:79]
+WARNING: [Vivado 12-584] No ports matched 'dac[1]'. [fpga/constraints/top_dvs_basys3.xdc:82]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:82]
+WARNING: [Vivado 12-584] No ports matched 'dac[1]'. [fpga/constraints/top_dvs_basys3.xdc:83]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:83]
+WARNING: [Vivado 12-584] No ports matched 'dac[0]'. [fpga/constraints/top_dvs_basys3.xdc:86]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:86]
+WARNING: [Vivado 12-584] No ports matched 'dac[0]'. [fpga/constraints/top_dvs_basys3.xdc:87]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:87]
+WARNING: [Vivado 12-584] No ports matched 'uart_rx_pin'. [fpga/constraints/top_dvs_basys3.xdc:91]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:91]
+WARNING: [Vivado 12-584] No ports matched 'uart_rx_pin'. [fpga/constraints/top_dvs_basys3.xdc:92]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:92]
+WARNING: [Vivado 12-584] No ports matched 'uart_rx_pin'. [fpga/constraints/top_dvs_basys3.xdc:93]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:93]
+WARNING: [Vivado 12-584] No ports matched 'dac[4]'. [fpga/constraints/top_dvs_basys3.xdc:116]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:116]
+WARNING: [Vivado 12-584] No ports matched 'dac[4]'. [fpga/constraints/top_dvs_basys3.xdc:117]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:117]
+WARNING: [Vivado 12-584] No ports matched 'dac[5]'. [fpga/constraints/top_dvs_basys3.xdc:120]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:120]
+WARNING: [Vivado 12-584] No ports matched 'dac[5]'. [fpga/constraints/top_dvs_basys3.xdc:121]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:121]
+WARNING: [Vivado 12-584] No ports matched 'dac[6]'. [fpga/constraints/top_dvs_basys3.xdc:124]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:124]
+WARNING: [Vivado 12-584] No ports matched 'dac[6]'. [fpga/constraints/top_dvs_basys3.xdc:125]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:125]
+WARNING: [Vivado 12-584] No ports matched 'dac[7]'. [fpga/constraints/top_dvs_basys3.xdc:128]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:128]
+WARNING: [Vivado 12-584] No ports matched 'dac[7]'. [fpga/constraints/top_dvs_basys3.xdc:129]
+CRITICAL WARNING: [Common 17-55] 'set_property' expects at least one object. [fpga/constraints/top_dvs_basys3.xdc:129]
 WARNING: [Route 35-328] Router estimated timing not met.
 CRITICAL WARNING: [Timing 38-282] The design failed to meet the timing requirements. Please see the timing summary report for details on the timing violations.
 WARNING: [DRC DPIP-1] Input pipelining: DSP v_player/phase_accumulator2 input v_player/phase_accumulator2/B[17:0] is not pipelined. Pipelining DSP48 input will improve performance.

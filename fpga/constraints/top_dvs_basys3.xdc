@@ -1,5 +1,5 @@
 ## This file is a general .xdc for the Basys3 rev B board
-## Configured for Integrated DVS Audio System (XADC Timecode + SD Audio Player + 8-bit DAC)
+## Configured for Dual-Board DVS Architecture (Board A Streamer / Board B DAC Receiver)
 
 ## Clock signal
 set_property PACKAGE_PIN W5 [get_ports clk]
@@ -86,10 +86,14 @@ set_property IOSTANDARD LVCMOS33 [get_ports {dac[1]}]
 set_property PACKAGE_PIN G3 [get_ports {dac[0]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {dac[0]}]
 
-## Pmod Header JC (UART RX Optional)
+## Pmod Header JC (High-Speed UART Link between Board A and Board B)
+## Sch name = JC1 (Pin 1)
 set_property PACKAGE_PIN K17 [get_ports uart_rx_pin]
 set_property IOSTANDARD LVCMOS33 [get_ports uart_rx_pin]
 set_property PULLUP true [get_ports uart_rx_pin]
+
+set_property PACKAGE_PIN K17 [get_ports uart_tx_pin]
+set_property IOSTANDARD LVCMOS33 [get_ports uart_tx_pin]
 
 ## Pmod Header JXADC (XADC Analog Timecode Inputs + DAC bity 4-7)
 ## Sch name = XA1_P (Left Channel Analog In +)
@@ -124,6 +128,10 @@ set_property IOSTANDARD LVCMOS33 [get_ports {dac[6]}]
 set_property PACKAGE_PIN N1 [get_ports {dac[7]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {dac[7]}]
 
-## Configuration options
+## Configuration options for Non-Volatile QSPI Flash Booting (UG470 / Basys 3 Reference Manual)
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
+set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
+set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES [current_design]

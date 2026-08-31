@@ -11,6 +11,12 @@
 # (it should provide: project_name, top_module, target, and paths to all the sources)
 source scripts/project_details.tcl
 
+# Override top module and project name via environment variable if provided
+if {[info exists ::env(TOP_MODULE)] && $::env(TOP_MODULE) ne ""} {
+    set top_module $::env(TOP_MODULE)
+    set project_name $::env(TOP_MODULE)
+}
+
 # Create project
 proc create_new_project {project_name target top_module} {
     file mkdir build
@@ -25,6 +31,9 @@ proc create_new_project {project_name target top_module} {
 
     set_property top ${top_module} [current_fileset]
     update_compile_order -fileset sources_1
+
+    # Enable raw .bin generation for QSPI Flash programming
+    set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]
 }
 
 
@@ -35,7 +44,7 @@ proc generate_bitstream {} {
     launch_runs synth_1 -jobs 8
     wait_on_run synth_1
 
-    # Run implemenatation up to bitstream generation
+    # Run implementation up to bitstream generation
     launch_runs impl_1 -to_step write_bitstream -jobs 8
     wait_on_run impl_1
 }

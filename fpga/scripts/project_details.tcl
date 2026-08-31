@@ -4,15 +4,16 @@
 #
 # Description:
 # Project details required for generate_bitstream.tcl
-# Integrated DVS System (XADC Timecode + SD Audio Player + 16x DAC)
+# Dual-Board DVS Architecture (Board A Streamer / Board B DAC Receiver)
 
 #-----------------------------------------------------#
 # Project name                                  -- EDIT
-set project_name dvs_basys3_integrated
+set project_name dvs_basys3_dual_board
 
 
 # Top module name                               -- EDIT
-set top_module top_dvs_basys3
+# Default to Board A Streamer (override with TOP_MODULE env var: top_board_a_streamer or top_board_b_dac)
+set top_module top_board_a_streamer
 
 # FPGA device
 set target xc7a35tcpg236-1
@@ -27,7 +28,10 @@ set xdc_files {
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
+    ../rtl/top_board_a_streamer.sv
+    ../rtl/top_board_b_dac.sv
     ../rtl/top_dvs_basys3.sv
+    
     ../rtl/xadc_interface.sv
     ../rtl/timecode_pos_tracker.sv
     ../rtl/led_pos_display.sv
@@ -43,6 +47,7 @@ set sv_files {
     ../rtl/button_debouncer.sv
     
     ../rtl/dvs_uart_receiver.sv
+    ../rtl/uart_tx.sv
     ../rtl/uart_rx.sv
 }
 
