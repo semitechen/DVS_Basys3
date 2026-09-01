@@ -39,6 +39,7 @@ xrun.log
 
 results/*
 !results/*.bit
+!results/*.bin
 !results/warning_summary.log
 
 tools/audio_in/

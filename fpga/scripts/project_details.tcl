@@ -56,11 +56,8 @@ set sv_files {
 # }
 
 # Specify VHDL design files location            -- EDIT
-set vhdl_files {
-    ../rtl/Ps2Interface.vhd
-    ../rtl/MouseCtl.vhd
-    ../rtl/MouseDisplay.vhd
-}
+# set vhdl_files {
+# }
 
 # Specify files for a memory initialization     -- EDIT
 # set mem_files {
